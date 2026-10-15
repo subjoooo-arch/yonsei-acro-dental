@@ -2,7 +2,7 @@
 
 ## 구조
 - `data/clinic.json`: 병원 정보(주소·전화·진료시간·의료진·진료과목·링크·검색 인증코드). 출처: yonseiacro.com
-- `content/posts/*.md`: 블로그 · `content/news/*.md`: 치과 소식 (각 글은 한 섹션에만; 옮긴 글은 `redirect_from`으로 _redirects 자동 생성)
+- `content/posts/*.md`: 블로그 (각 글은 한 섹션에만; 옮긴 글은 `redirect_from`으로 _redirects 자동 생성)
 - `content/cases/*.md`: 임상 케이스 (전/후 사진, 치료, 기간, 참고사항)
 - `content/_templates/`: 새 글/케이스 템플릿
 - `scripts/build.py`: md → HTML, `blog/posts.json`, `cases/cases.json`, `sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD 생성
@@ -18,7 +18,7 @@ python3 -m http.server 8000   # http://localhost:8000
 ```
 
 ## 새 글 추가 (3가지 방법)
-1. **관리자 페이지**: `https://도메인/admin/` 로그인 → 블로그 / 치과 소식 / 임상 케이스 → 새로 만들기 → 저장 → 검토 → 게시. 게시하면 자동 빌드됩니다.
+1. **관리자 페이지**: `https://도메인/admin/` 로그인 → 블로그 / 임상 케이스 → 새로 만들기 → 저장 → 검토 → 게시. 게시하면 자동 빌드됩니다.
 2. **네이버 블로그에서 복사**: `python3 scripts/import_naver.py https://blog.naver.com/yonseiacro/글번호` (또는 `--rss` 로 최신 글 전체). 제목에 '사례/케이스'가 있으면 임상 케이스 초안도 생성됩니다. 이후 `build.py`.
 3. **직접 작성**: `content/_templates/post.md`를 `content/posts/`에 복사해 수정.
 태그를 새로 쓰면 필터 버튼이 자동 생성됩니다. `summary`는 검색·AI 답변에 그대로 쓰이므로 질문에 대한 답 1~2문장으로 쓰세요.

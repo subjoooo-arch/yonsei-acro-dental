@@ -84,7 +84,7 @@ def head(title,desc,path,img='/assets/brand/og-image.jpg',typ='website',noindex=
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{D}{img}">
 <meta name="geo.region" content="KR-41"><meta name="geo.position" content="{C['geo']['lat']};{C['geo']['lng']}">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/assets/favicon-192.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="theme-color" content="#2f4a6b"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preload" as="style" href="{FONT}" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="{FONT}"></noscript>{'<link rel="preload" as="image" href="/assets/clinic/interior-1.webp" fetchpriority="high">' if path=="/" else ""}<style>{CSS}</style>{extra}</head><body class="{"home" if path=="/" else "sub"}">
-<header class="site"><div class="wrap"><a class="logo" href="/" aria-label="{C['name']} 홈"><img class="lc" src="/assets/brand/logo-horizontal-96.png" alt="{C['name']} 로고" loading="eager"><img class="lw" src="/assets/brand/logo-horizontal-white-96.png" alt="" aria-hidden="true" loading="eager"></a><nav aria-label="주 메뉴"><a href="/#doctors">의료진</a><a href="/treatments/">진료과목</a><a href="/blog/">블로그</a><a href="/cases/">임상 케이스</a><a href="/news/">치과 소식</a><a href="/about/">병원 정보</a><a href="/faq/">FAQ</a><a href="/#location">오시는 길</a></nav><a class="hbtn" href="{L['naver_booking']}" target="_blank" rel="noopener">예약하기</a></div></header><main>'''
+<header class="site"><div class="wrap"><a class="logo" href="/" aria-label="{C['name']} 홈"><img class="lc" src="/assets/brand/logo-horizontal-96.png" alt="{C['name']} 로고" loading="eager"><img class="lw" src="/assets/brand/logo-horizontal-white-96.png" alt="" aria-hidden="true" loading="eager"></a><nav aria-label="주 메뉴"><a href="/#doctors">의료진</a><a href="/treatments/">진료과목</a><a href="/blog/">블로그</a><a href="/cases/">임상 케이스</a><a href="/about/">병원 정보</a><a href="/faq/">FAQ</a><a href="/#location">오시는 길</a></nav><a class="hbtn" href="{L['naver_booking']}" target="_blank" rel="noopener">예약하기</a></div></header><main>'''
 def foot():
   return f'''</main><section class="ctaband"><div class="wrap"><div><p class="eyebrow light">예약 · 상담</p><h2>아픈 곳이 없어도,<br><em>궁금한 점부터</em> 편하게<br>물어보세요.</h2><p>전문의가 현재 상태를 정확히 설명드리고,<br>꼭 필요한 치료만 함께 정하겠습니다.</p></div>
 <div class="cbtns"><a class="cb w" href="tel:{C['phone']}"><span>전화 {C['phone']}</span><i>→</i></a><a class="cb y" href="{L['kakao_channel']}" target="_blank" rel="noopener"><span>카카오톡 상담</span><i>→</i></a><a class="cb g" href="{L['naver_booking']}" target="_blank" rel="noopener"><span>네이버 예약</span><i>→</i></a></div></div></section><footer class="site"><div class="wrap fgrid"><div><img class="flogo" src="/assets/brand/logo-stacked-white-260.png" alt="{C['name']} 로고" loading="lazy"><strong>{C['name']}</strong><address>주소: {C['address']}<br>대표전화: <a href="tel:{C['phone']}">{C['phone']}</a><br>대표: {C['ceo']} · 사업자등록번호: {C['biz_no']}</address></div>
@@ -97,12 +97,11 @@ def card(p,base=None):
 def booking_box():
   return f'<div class="bbox"><a class="btn" href="{L["naver_booking"]}" target="_blank" rel="noopener">네이버 예약</a><a class="btn kk" href="{L["kakao_channel"]}" target="_blank" rel="noopener">카카오톡 상담·예약</a><a class="btn ghost" href="tel:{C["phone"]}">{C["phone"]}</a></div>'
 def md(t): return re.sub(r'<(/?)h1>',r'<\1p>',markdown.markdown(re.sub(r'(?m)^#(?=[^#\s])',r'\#',t),extensions=['extra']))
-for d in ('blog/posts','news','cases'):
+for d in ('blog/posts','cases'):
   for f in glob.glob(f'{R}/{d}/*.html'): os.remove(f)
-blog=load('posts'); news=load('news'); cases=load('cases')
+blog=load('posts'); cases=load('cases')
 for p in blog: p['url']=f'/blog/posts/{p["slug"]}.html'; p['category']='블로그'
-for p in news: p['url']=f'/news/{p["slug"]}.html'; p['category']='치과 소식'
-posts=blog+news
+posts=blog
 for c in cases: c['public']=not c.get('review_required',True)
 # ---- data json
 w('blog/posts.json',J([{k:p.get(k) for k in ('slug','title','date','category','tag','summary','thumbnail','popular','url','source_url')} for p in posts]))
@@ -140,7 +139,6 @@ def list_page(path,title,h1,desc,items,crumb,tagfilter=True,base='/blog/posts/',
   s=head(title,desc,path)+f'<div class="wrap page"><nav class="bc" aria-label="breadcrumb"><a href="/">홈</a> › {h1}</nav><h1 class="ptitle">{h1}</h1><p class="lead l">{desc}</p>{extra_top}{btn}<div class="blog-layout{'' if items else ' one'}"><div class="plist" id="list">{"".join(cardf(p) for p in items) or EMPTY}</div>'+(('<aside class="popular"><h2>인기 게시물</h2>'+''.join(f'<a href="{p.get("url") or base+p["slug"]+".html"}">{E(p["title"])}</a>' for p in pop)+'</aside>') if pop else '')+f'</div></div><script src="/js/filter.js"></script>'
   s+=ld(crumbs([('홈','/'),(h1,path)]),{"@context":"https://schema.org","@type":"CollectionPage","name":title,"url":D+path,"isPartOf":{"@id":CLINIC_ID}})+foot(); w(path.lstrip('/')+'index.html',s)
 list_page('/blog/',f'일산 치과 블로그 – 치료 정보 | 대화역 {C["name"]}','블로그','일산 대화역 연세아크로치과 전문의가 설명하는 임플란트·충치·신경치료·사랑니·미백 등 치료 정보입니다.',blog,None)
-list_page('/news/',f'치과 소식 | 일산 대화역 치과 {C["name"]}','치과 소식','일산서구 대화역 연세아크로치과의원의 병원 소식과 진료팀 이야기를 전합니다.',news,None,tagfilter=False,base='/news/')
 def case_card(c):
   img=c.get('thumbnail') or c.get('after') or c.get('before'); th=f'<img loading="lazy" src="{img}" alt="{E(c["title"])} 대표 이미지">' if img else ''
   badge='<span class="rev">검수 필요 · 비공개(noindex)</span>' if not c['public'] else ''
@@ -160,12 +158,12 @@ def modified(p):
   u=p.get('updated')
   if u: return str(u)[:10]
   try:
-    import subprocess; g=subprocess.run(['git','log','-1','--format=%cs','--',f"content/{'news' if p.get('category')=='치과 소식' else 'posts'}/{p['slug']}.md"],cwd=R,capture_output=True,text=True).stdout.strip()
+    import subprocess; g=subprocess.run(['git','log','-1','--format=%cs','--',f"content/posts/{p['slug']}.md"],cwd=R,capture_output=True,text=True).stdout.strip()
     return max(g,p['date']) if g else p['date']
   except Exception: return p['date']
 def related(p): return [x for x in blog if x['tag']==p['tag'] and x['slug']!=p['slug']][:3]
 for p in posts:
-  isnews=p.get('category')=='치과 소식'; sec=('치과 소식','/news/') if isnews else ('블로그','/blog/')
+  sec=('블로그','/blog/')
   img=p.get('thumbnail') or '/assets/brand/og-image.jpg'
   qa=p.get('faq') or []; qs=[(q['q'],q['a']) for q in qa if q.get('q')]
   s=head(f'{p["title"]} | {C["name"]}',p['summary'][:150],p['url'],img,'article')+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="{sec[1]}">{sec[0]}</a></nav>
@@ -240,7 +238,7 @@ fp+=f'<div class="wrap page narrow"><nav class="bc"><a href="/">홈</a> › FAQ<
 fp+=ld(faq_ld(fqs),crumbs([('홈','/'),('FAQ','/faq/')]))+foot()
 w('faq/index.html',fp)
 # ---- sitemap / llms
-urls=['/','/about/','/faq/','/treatments/','/blog/','/news/','/cases/']+[f'/treatments/{t["id"]}.html' for t in C['treatments']]+[p['url'] for p in posts]+[c['url'] for c in cases if c['public']]
+urls=['/','/about/','/faq/','/treatments/','/blog/','/cases/']+[f'/treatments/{t["id"]}.html' for t in C['treatments']]+[p['url'] for p in posts]+[c['url'] for c in cases if c['public']]
 lm={p['url']:modified(p) for p in posts}
 w('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{D}{u}</loc>{"<lastmod>"+lm[u]+"</lastmod>" if u in lm else ""}</url>\n' for u in urls)+'</urlset>\n')
 w('robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\n\n'+''.join(f'User-agent: {b}\nAllow: /\nDisallow: /admin/\n\n' for b in ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-Web','PerplexityBot','Google-Extended','Applebot-Extended','Yeti','Bingbot','CCBot'])+f'Sitemap: {D}/sitemap.xml\n')
@@ -257,16 +255,16 @@ llms=f"""# {C['name']} ({C['name_en']})
 - 지도: 네이버 {L['naver_map']} · Google {L['google_maps']}
 
 ## 의료진
-"""+''.join(f"- {d['role']} {d['name']}: {', '.join(d['career'][:3])}\n" for d in C['doctors'])+"\n## 진료과목\n"+''.join(f"- [{t['name']}]({D}/treatments/{t['id']}.html): {t['text']}\n" for t in C['treatments'])+"\n## 블로그 (치료 정보)\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in blog[:15])+"\n## 임상 케이스\n"+''.join(f"- [{c['title']}]({D}{c['url']}) ({c['date']})\n" for c in cases if c['public'])+"\n## 치과 소식\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in news)
+"""+''.join(f"- {d['role']} {d['name']}: {', '.join(d['career'][:3])}\n" for d in C['doctors'])+"\n## 진료과목\n"+''.join(f"- [{t['name']}]({D}/treatments/{t['id']}.html): {t['text']}\n" for t in C['treatments'])+"\n## 블로그 (치료 정보)\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in blog[:15])+"\n## 임상 케이스\n"+''.join(f"- [{c['title']}]({D}{c['url']}) ({c['date']})\n" for c in cases if c['public'])
 llms=re.sub(r'\n## [^\n]+\n(?=\n## |\s*$)','\n',llms)
 llms=llms.replace('## 기본 정보','## 병원 정보 페이지\n- '+D+'/about/ (사실 정보 요약, Q&A)\n- 전체 텍스트: '+D+'/llms-full.txt\n\n## 기본 정보',1)
 w('llms.txt',llms)
 full=llms+'\n\n# 자주 묻는 질문\n'+''.join(f'\nQ. {q}\nA. {a}\n' for q,a in fqs)+'\n\n# 진료과목 상세\n'+''.join(f"\n## {t['name']}\n{t['text']}\nURL: {D}/treatments/{t['id']}.html\n" for t in C['treatments'])
 def plain(b): return re.sub(r'!\[[^\]]*\]\([^)]*\)\n*','',b).strip()
-for title,items in (('블로그',blog),('치과 소식',news),('임상 케이스',[c for c in cases if c['public']])):
+for title,items in (('블로그',blog),('임상 케이스',[c for c in cases if c['public']])):
   if items: full+=f'\n\n# {title}\n'+''.join(f"\n## {p['title']}\nURL: {D}{p['url']}\n작성일: {p['date']}\n요약: {p['summary']}\n\n{plain(p['body'])}\n" for p in items)
 w('llms-full.txt',full)
 
 rd=[f'{u} {x["url"]} 301' for x in posts+cases for u in (x.get('redirect_from') or [])]
 w('_redirects','\n'.join(rd)+'\n')
-print(f'built: {len(blog)} blog, {len(news)} news, {len(cases)} cases')
+print(f'built: {len(blog)} blog, {len(cases)} cases')

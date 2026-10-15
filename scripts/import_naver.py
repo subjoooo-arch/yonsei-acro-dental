@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """네이버 블로그 글 가져오기.
 사용: python3 scripts/import_naver.py <글URL|logNo ...>   또는   python3 scripts/import_naver.py --rss [--limit N]
-결과: 한 섹션에만 저장 — 임상 사례(제목에 사례/케이스) content/cases/, 치과 소식 content/news/, 그 외 content/posts/, 이미지는 assets/blog/<slug>/ 에 저장.
+결과: 한 섹션에만 저장 — 임상 사례(제목에 사례/케이스) content/cases/, 그 외 content/posts/, 이미지는 assets/blog/<slug>/ 에 저장.
 이미 있는 파일은 건너뜀(--force 로 덮어쓰기). 이후 python3 scripts/build.py 실행."""
 import sys, re, os, json, urllib.request, xml.etree.ElementTree as ET, email.utils
 from bs4 import BeautifulSoup
@@ -15,14 +15,14 @@ CASE_KW=('사례','케이스')
 def tag_for(t):
   for k,v in TAGS:
     if k in t: return v
-  return '치과 소식'
+  return '병원 이야기'
 def yq(s): return json.dumps(s,ensure_ascii=False)
 def rss_items():
   r=ET.fromstring(get(f'https://rss.blog.naver.com/{BLOG}.xml'))
   return [(re.search(r'/(\d+)',i.findtext('link').split(BLOG)[1]).group(1), i.findtext('category'), email.utils.parsedate_to_datetime(i.findtext('pubDate')).strftime('%Y-%m-%d')) for i in r.iter('item')]
 def import_post(logno,cat=None,date=None,force=False):
   slug=f'naver-{logno}'
-  if not force and any(os.path.exists(f'{ROOT}/content/{d}/{slug}.md') for d in ('posts','news','cases')): print('skip',slug); return
+  if not force and any(os.path.exists(f'{ROOT}/content/{d}/{slug}.md') for d in ('posts','cases')): print('skip',slug); return
   url=f'https://blog.naver.com/{BLOG}/{logno}'
   s=BeautifulSoup(get(f'https://m.blog.naver.com/PostView.naver?blogId={BLOG}&logNo={logno}'),'html.parser')
   title=(s.select_one('meta[property="og:title"]') or {}).get('content','').strip()
@@ -46,16 +46,16 @@ def import_post(logno,cat=None,date=None,force=False):
       if txt: body.append(('## ' if 'se-sectionTitle' in cl else '> ' if 'se-quotation' in cl else '')+txt.replace('\n','\n\n') )
   text=' '.join(b for b in body if not b.startswith('!'))
   summary=re.sub(r'\s+',' ',text); summary=re.sub(r'^안녕하세요\.?\s*[^.:)]*[.:)]+\s*','',summary)[:150].strip()
-  category='치과 소식' if (cat in NEWS or any(k in title for k in NEWS_KW)) else '블로그'
-  tag=tag_for(title) if category=='블로그' else '치과 소식'
+  category='블로그'  # 치과 소식 섹션 폐지: 모든 일반 글은 블로그로
+  tag=tag_for(title)
   is_case=any(k in title for k in CASE_KW)
   fm=f'---\ntitle: {yq(title)}\ndate: {yq(date)}\ncategory: {yq(category)}\ntag: {yq(tag)}\nsummary: {yq(summary)}\nthumbnail: {yq(imgs[0] if imgs else "")}\npopular: false\nauthor: "연세아크로치과"\nsource_url: {yq(url)}\nnaver_category: {yq(cat or "")}\n---\n\n'
-  # 섹션은 하나만: 임상 케이스 > 치과 소식 > 블로그
+  # 섹션은 하나만: 임상 케이스 > 블로그
   if is_case:
     out=f'{ROOT}/content/cases/{slug}.md'
     fm=f'---\ntitle: {yq(title)}\ndate: {yq(date)}\ntreatment: {yq(tag)}\nperiod: "[치료기간 확인 필요]"\nbefore: {yq(imgs[0] if imgs else "")}\nafter: {yq(imgs[-1] if len(imgs)>1 else "")}\nnotes: "[원장 검수 필요] 네이버 블로그 원문에서 자동 생성. 전/후 사진 지정·의료광고 심의 확인 후 공개하세요."\nreview_required: true\nsummary: {yq(summary)}\nthumbnail: {yq(imgs[0] if imgs else "")}\nsource_url: {yq(url)}\n---\n\n'
   else:
-    out=f'{ROOT}/content/{"news" if category=="치과 소식" else "posts"}/{slug}.md'
+    out=f'{ROOT}/content/posts/{slug}.md'
   os.makedirs(os.path.dirname(out),exist_ok=True); open(out,'w').write(fm+'\n\n'.join(body)+'\n'); print('ok',out.split('/content/')[1],tag,len(imgs),'imgs')
 if __name__=='__main__':
   a=sys.argv[1:]; force='--force' in a

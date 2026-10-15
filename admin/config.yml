@@ -1,4 +1,4 @@
-# Decap CMS 설정 (블로그=content/posts, 치과 소식=content/news, 임상 케이스=content/cases)
+# Decap CMS 설정 (블로그=content/posts, 임상 케이스=content/cases)
 # GitHub 백엔드 사용 시 backend를 {name: github, repo: subjoooo-arch/yonsei-acro-dental, branch: main}로 변경
 backend:
   name: git-gateway
@@ -44,76 +44,7 @@ collections:
     - 소아치과
     - 교정·유지장치
     - 예방·검진
-    - 치과 소식
-  - label: 요약(검색·AI 요약용 답변 1~2문장)
-    name: summary
-    widget: text
-  - label: 대표 질문(선택)
-    name: question
-    widget: string
-    required: false
-  - label: 대표 이미지
-    name: thumbnail
-    widget: image
-    required: false
-  - label: 인기 게시물
-    name: popular
-    widget: boolean
-    default: false
-  - label: 작성자
-    name: author
-    widget: string
-    default: 연세아크로치과
-  - label: FAQ
-    name: faq
-    widget: list
-    required: false
-    fields:
-    - label: 질문
-      name: q
-      widget: string
-    - label: 답변
-      name: a
-      widget: text
-  - label: 원문 URL
-    name: source_url
-    widget: string
-    required: false
-  - label: 본문
-    name: body
-    widget: markdown
-- name: news
-  label: 치과 소식
-  folder: content/news
-  create: true
-  slug: news-{{year}}{{month}}{{day}}-{{fields.title}}
-  fields:
-  - label: 제목
-    name: title
-    widget: string
-  - label: 날짜
-    name: date
-    widget: datetime
-    format: YYYY-MM-DD
-    date_format: YYYY-MM-DD
-    time_format: false
-  - label: 태그(치료분야)
-    name: tag
-    widget: select
-    options:
-    - 임플란트
-    - 충치치료
-    - 신경치료
-    - 보철치료
-    - 틀니
-    - 잇몸치료
-    - 사랑니 발치
-    - 치아미백
-    - 턱관절 치료
-    - 소아치과
-    - 교정·유지장치
-    - 예방·검진
-    - 치과 소식
+    - 병원 이야기
   - label: 요약(검색·AI 요약용 답변 1~2문장)
     name: summary
     widget: text

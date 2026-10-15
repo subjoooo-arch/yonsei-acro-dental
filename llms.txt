@@ -30,4 +30,3 @@
 - [턱관절 치료](https://yonseiacro-preview.netlify.app/treatments/tmj.html): 턱관절 질환의 원인을 찾아서 예방하고 관리하는 프로그램을 제공합니다.
 
 
-
