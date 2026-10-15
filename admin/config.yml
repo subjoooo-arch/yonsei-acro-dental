@@ -295,6 +295,28 @@ collections:
       - label: 구글
         name: google
         widget: string
+    - label: 진료공간·장비 갤러리
+      name: gallery
+      widget: list
+      summary: '{{fields.caption}}'
+      fields:
+      - label: 사진
+        name: image
+        widget: image
+      - label: 이름(캡션)
+        name: caption
+        widget: string
+      - label: 대체텍스트
+        name: alt
+        widget: string
+        required: false
+      - label: 맞춤
+        name: fit
+        widget: select
+        options:
+        - cover
+        - contain
+        default: cover
   - label: 자주 묻는 질문(FAQ)
     name: faq
     file: data/faq.json

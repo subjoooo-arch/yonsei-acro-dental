@@ -120,3 +120,8 @@ body.home header.site:not(.scrolled) .lc{display:none}body.home header.site:not(
 .flinks{align-content:start}
 .blog-layout.one{grid-template-columns:1fr}.empty{text-align:center;padding:80px 20px;border-top:2px solid var(--ink)}.empty .eyebrow{justify-content:center}.empty h2{font-size:1.8rem;font-weight:800;margin:0 0 10px}.empty p{color:var(--sub)}
 .faq+.faq{margin-top:56px}
+.egal{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:14px}.ecard{margin:0;background:#fff;border-radius:6px;overflow:hidden}
+.ecard img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}.ecard.contain img{object-fit:contain;background:#fff;padding:8px}
+.ecard figcaption{padding:10px 12px;font-size:.9rem;font-weight:700;color:var(--ink);text-align:center}
+@media(max-width:1000px){.egal{grid-template-columns:repeat(3,1fr)}}@media(max-width:640px){.egal{grid-template-columns:repeat(2,1fr)}}
+.gallery{grid-template-columns:repeat(3,1fr)}@media(max-width:640px){.gallery{grid-template-columns:1fr}}

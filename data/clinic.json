@@ -176,5 +176,37 @@
  "google_verification": "",
  "bing_verification": "",
  "default_author": 0,
- "telephone_intl": "+82-31-922-2888"
+ "telephone_intl": "+82-31-922-2888",
+ "gallery": [
+  {
+   "image": "/assets/equipment/physio-room.webp",
+   "caption": "물리치료실",
+   "alt": "연세아크로치과 물리치료실",
+   "fit": "cover"
+  },
+  {
+   "image": "/assets/equipment/precision-lab.webp",
+   "caption": "정밀가공센터",
+   "alt": "연세아크로치과 정밀가공센터",
+   "fit": "cover"
+  },
+  {
+   "image": "/assets/equipment/3d-printer.webp",
+   "caption": "3D 프린터",
+   "alt": "연세아크로치과 3D 프린터",
+   "fit": "cover"
+  },
+  {
+   "image": "/assets/equipment/milling-machine.webp",
+   "caption": "밀링기",
+   "alt": "연세아크로치과 밀링기",
+   "fit": "cover"
+  },
+  {
+   "image": "/assets/equipment/primescan.webp",
+   "caption": "프라임스캔",
+   "alt": "연세아크로치과 프라임스캔",
+   "fit": "contain"
+  }
+ ]
 }
