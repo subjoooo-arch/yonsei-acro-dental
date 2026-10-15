@@ -109,3 +109,4 @@ footer.site{background:#0d131b;color:#8b95a3;padding:60px 0 100px;font-size:.88r
 .nstatic span{position:absolute;right:16px;bottom:16px;background:var(--nv);color:#fff;font-weight:700;padding:10px 18px;border-radius:999px;font-size:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 @media(max-width:640px){#nmap,.nstatic img,#nmap.live{min-height:0;height:280px}}
 .fact{border-top:1px solid var(--line);padding:16px 0}.fact h3{margin:0 0 6px}.fact ul{margin:0;padding-left:18px;color:var(--sub)}
+#nmap.live img{max-width:none!important;height:auto;display:inline}
