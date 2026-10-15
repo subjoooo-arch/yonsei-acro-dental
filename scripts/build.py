@@ -234,7 +234,7 @@ for gp in FAQ:
 nav=''.join(f'<a class="pill ol" href="#faq-{i}">{E(g["category"])}</a>' for i,g in enumerate(FAQ) if g['items'])
 body=''.join(f'<section class="faq" id="faq-{i}"><h2>{E(g["category"])}</h2>'+''.join(f'<details><summary>{E(x["q"])}</summary><p>{E(x["a"])}</p></details>' for x in g['items'])+'</section>' for i,g in enumerate(FAQ) if g['items'])
 alltxt=' '.join(q+' '+a for q,a in fqs)
-chips=''.join(f'<button type="button" class="chipq">{k}</button>' for k in ['진료시간','야간진료','예약','주차','지하철','임플란트','충치치료','신경치료','사랑니','치아미백','의료진'] if k in alltxt)
+chips=''.join(f'<button type="button" class="chipq">{k}</button>' for k in ['진료시간','야간진료','예약','주차','지하철','임플란트','충치치료','신경치료','사랑니','치아미백','라미네이트','의료진'] if k in alltxt)
 fp=head(f'자주 묻는 질문(FAQ) | 일산 대화역 치과 {C["name"]}',f'연세아크로치과의원 FAQ: 진료시간·야간진료·예약·주차·교통, 의료진, 진료과목 등 자주 묻는 질문 {len(fqs)}개에 답합니다.','/faq/')
 fp+=f'<div class="wrap page narrow"><nav class="bc"><a href="/">홈</a> › FAQ</nav><h1 class="ptitle">자주 묻는 질문</h1><p class="lead l">진료시간, 예약, 위치, 의료진, 진료과목에 대해 자주 묻는 질문입니다. 더 궁금한 점은 전화({C["phone"]})나 카카오톡으로 문의해 주세요.</p><div class="fsearch" role="search"><label for="fq" class="sr">FAQ 검색</label><input id="fq" type="search" placeholder="궁금한 내용을 검색해보세요 (예: 주차, 임플란트)" autocomplete="off"><button type="button" id="fqx" aria-label="검색어 지우기" hidden>×</button></div><div class="chipsq">{chips}</div><p id="fqn" class="muted" aria-live="polite"></p><div class="pills" style="margin-bottom:40px">{nav}</div><div id="fqbody">{body}</div><div id="fqempty" class="empty" hidden><h2>검색 결과가 없습니다</h2><p>찾으시는 내용이 없다면 편하게 문의해 주세요.</p>{booking_box()}</div></div><script src="/js/faq.js" defer></script>'
 fp+=ld(faq_ld(fqs),crumbs([('홈','/'),('FAQ','/faq/')]))+foot()
