@@ -1,83 +1,298 @@
-# Decap CMS 설정. 기본: Netlify Identity + Git Gateway.
-# GitHub 백엔드를 쓰려면 아래 backend를 주석 처리하고 github 블록을 사용하세요.
+# Decap CMS 설정 (블로그=content/posts, 치과 소식=content/news, 임상 케이스=content/cases)
+# GitHub 백엔드 사용 시 backend를 {name: github, repo: subjoooo-arch/yonsei-acro-dental, branch: main}로 변경
 backend:
   name: git-gateway
   branch: main
-# backend:
-#   name: github
-#   repo: [GitHub계정]/[저장소명]
-#   branch: main
-#   base_url: [OAuth 프록시 URL]   # Cloudflare Pages 사용 시 필요
 locale: ko
-publish_mode: editorial_workflow   # 초안 → 검토 → 게시 (의료광고 검수용)
+publish_mode: editorial_workflow
 media_folder: assets/uploads
 public_folder: /assets/uploads
-site_url: https://[도메인]
-slug: {encoding: unicode, clean_accents: false}
-
-# 각 글은 한 컬렉션(폴더)에만 존재합니다: 블로그=content/posts, 치과 소식=content/news, 임상 케이스=content/cases
-_post_fields: &post_fields
-  - {label: 제목, name: title, widget: string}
-  - {label: 날짜, name: date, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false}
-  - {label: 태그(치료분야), name: tag, widget: select, options: [임플란트, 충치치료, 신경치료, 보철치료, 틀니, 잇몸치료, 사랑니 발치, 치아미백, 턱관절 치료, 소아치과, 교정·유지장치, 예방·검진, 치과 소식]}
-  - {label: 요약(검색·AI 요약용 답변 1~2문장), name: summary, widget: text}
-  - {label: 대표 질문(선택), name: question, widget: string, required: false}
-  - {label: 대표 이미지, name: thumbnail, widget: image, required: false}
-  - {label: 인기 게시물, name: popular, widget: boolean, default: false}
-  - {label: 작성자, name: author, widget: string, default: 연세아크로치과}
-  - {label: FAQ, name: faq, widget: list, required: false, fields: [{label: 질문, name: q, widget: string}, {label: 답변, name: a, widget: text}]}
-  - {label: 원문 URL, name: source_url, widget: string, required: false}
-  - {label: 본문, name: body, widget: markdown}
-
+site_url: https://yonseiacro-preview.netlify.app
+slug:
+  encoding: unicode
+  clean_accents: false
 collections:
-  - name: blog
-    label: 블로그
-    folder: content/posts
-    create: true
-    slug: "{{year}}{{month}}{{day}}-{{fields.title}}"
-    summary: "{{date}} · {{tag}} · {{title}}"
+- name: blog
+  label: 블로그
+  folder: content/posts
+  create: true
+  slug: '{{year}}{{month}}{{day}}-{{fields.title}}'
+  summary: '{{date}} · {{tag}} · {{title}}'
+  fields:
+  - label: 제목
+    name: title
+    widget: string
+  - label: 날짜
+    name: date
+    widget: datetime
+    format: YYYY-MM-DD
+    date_format: YYYY-MM-DD
+    time_format: false
+  - label: 태그(치료분야)
+    name: tag
+    widget: select
+    options:
+    - 임플란트
+    - 충치치료
+    - 신경치료
+    - 보철치료
+    - 틀니
+    - 잇몸치료
+    - 사랑니 발치
+    - 치아미백
+    - 턱관절 치료
+    - 소아치과
+    - 교정·유지장치
+    - 예방·검진
+    - 치과 소식
+  - label: 요약(검색·AI 요약용 답변 1~2문장)
+    name: summary
+    widget: text
+  - label: 대표 질문(선택)
+    name: question
+    widget: string
+    required: false
+  - label: 대표 이미지
+    name: thumbnail
+    widget: image
+    required: false
+  - label: 인기 게시물
+    name: popular
+    widget: boolean
+    default: false
+  - label: 작성자
+    name: author
+    widget: string
+    default: 연세아크로치과
+  - label: FAQ
+    name: faq
+    widget: list
+    required: false
     fields:
-      - *post_fields
-  - name: news
-    label: 치과 소식
-    folder: content/news
-    create: true
-    slug: "news-{{year}}{{month}}{{day}}-{{fields.title}}"
+    - label: 질문
+      name: q
+      widget: string
+    - label: 답변
+      name: a
+      widget: text
+  - label: 원문 URL
+    name: source_url
+    widget: string
+    required: false
+  - label: 본문
+    name: body
+    widget: markdown
+- name: news
+  label: 치과 소식
+  folder: content/news
+  create: true
+  slug: news-{{year}}{{month}}{{day}}-{{fields.title}}
+  fields:
+  - label: 제목
+    name: title
+    widget: string
+  - label: 날짜
+    name: date
+    widget: datetime
+    format: YYYY-MM-DD
+    date_format: YYYY-MM-DD
+    time_format: false
+  - label: 태그(치료분야)
+    name: tag
+    widget: select
+    options:
+    - 임플란트
+    - 충치치료
+    - 신경치료
+    - 보철치료
+    - 틀니
+    - 잇몸치료
+    - 사랑니 발치
+    - 치아미백
+    - 턱관절 치료
+    - 소아치과
+    - 교정·유지장치
+    - 예방·검진
+    - 치과 소식
+  - label: 요약(검색·AI 요약용 답변 1~2문장)
+    name: summary
+    widget: text
+  - label: 대표 질문(선택)
+    name: question
+    widget: string
+    required: false
+  - label: 대표 이미지
+    name: thumbnail
+    widget: image
+    required: false
+  - label: 인기 게시물
+    name: popular
+    widget: boolean
+    default: false
+  - label: 작성자
+    name: author
+    widget: string
+    default: 연세아크로치과
+  - label: FAQ
+    name: faq
+    widget: list
+    required: false
     fields:
-      - *post_fields
-  - name: cases
-    label: 임상 케이스
-    folder: content/cases
-    create: true
-    slug: "case-{{year}}{{month}}{{day}}-{{fields.title}}"
+    - label: 질문
+      name: q
+      widget: string
+    - label: 답변
+      name: a
+      widget: text
+  - label: 원문 URL
+    name: source_url
+    widget: string
+    required: false
+  - label: 본문
+    name: body
+    widget: markdown
+- name: cases
+  label: 임상 케이스
+  folder: content/cases
+  create: true
+  slug: case-{{year}}{{month}}{{day}}-{{fields.title}}
+  fields:
+  - label: 제목
+    name: title
+    widget: string
+  - label: 날짜
+    name: date
+    widget: datetime
+    format: YYYY-MM-DD
+    date_format: YYYY-MM-DD
+    time_format: false
+  - label: 치료
+    name: treatment
+    widget: select
+    options:
+    - 임플란트
+    - 충치치료
+    - 신경치료
+    - 보철치료
+    - 틀니
+    - 잇몸치료
+    - 사랑니 발치
+    - 치아미백
+    - 턱관절 치료
+    - 소아치과
+    - 교정·유지장치
+  - label: 치료기간
+    name: period
+    widget: string
+  - label: 치료 전 사진
+    name: before
+    widget: image
+    required: false
+  - label: 치료 후 사진
+    name: after
+    widget: image
+    required: false
+  - label: 참고사항(부작용·주의사항 포함)
+    name: notes
+    widget: text
+  - label: 검수 필요(체크 시 noindex·사이트맵 제외)
+    name: review_required
+    widget: boolean
+    default: true
+  - label: 요약
+    name: summary
+    widget: text
+    required: false
+  - label: 대표 이미지
+    name: thumbnail
+    widget: image
+    required: false
+  - label: 인기 게시물
+    name: popular
+    widget: boolean
+    default: false
+  - label: 원문 URL
+    name: source_url
+    widget: string
+    required: false
+  - label: 설명
+    name: body
+    widget: markdown
+- name: settings
+  label: 병원 정보
+  files:
+  - label: 병원 기본정보(JSON)
+    name: clinic
+    file: data/clinic.json
+    format: json
     fields:
-      - {label: 제목, name: title, widget: string}
-      - {label: 날짜, name: date, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false}
-      - {label: 치료, name: treatment, widget: select, options: [임플란트, 충치치료, 신경치료, 보철치료, 틀니, 잇몸치료, 사랑니 발치, 치아미백, 턱관절 치료, 소아치과, 교정·유지장치]}
-      - {label: 치료기간, name: period, widget: string}
-      - {label: 치료 전 사진, name: before, widget: image, required: false}
-      - {label: 치료 후 사진, name: after, widget: image, required: false}
-      - {label: 참고사항(부작용·주의사항 포함), name: notes, widget: text}
-      - {label: "검수 필요(체크 시 noindex·사이트맵 제외)", name: review_required, widget: boolean, default: true}
-      - {label: 요약, name: summary, widget: text, required: false}
-      - {label: 대표 이미지, name: thumbnail, widget: image, required: false}
-      - {label: 인기 게시물, name: popular, widget: boolean, default: false}
-      - {label: 원문 URL, name: source_url, widget: string, required: false}
-      - {label: 설명, name: body, widget: markdown}
-  - name: settings
-    label: 병원 정보
-    files:
-      - label: 병원 기본정보(JSON)
-        name: clinic
-        file: data/clinic.json
-        format: json
-        fields:
-          - {label: 도메인, name: domain, widget: string}
-          - {label: 대표전화, name: phone, widget: string}
-          - {label: 주소, name: address, widget: string}
-          - {label: 소개, name: intro, widget: text}
-          - {label: 점심시간, name: lunch, widget: string}
-          - {label: 휴진, name: closed, widget: string}
-          - {label: 진료시간, name: hours, widget: list, fields: [{label: 표시, name: label, widget: string}, {label: 요일(영문), name: days, widget: list}, {label: 시작, name: open, widget: string}, {label: 종료, name: close, widget: string}]}
-          - {label: 링크, name: links, widget: object, fields: [{label: 네이버 예약, name: naver_booking, widget: string}, {label: 카카오 채널, name: kakao_channel, widget: string}, {label: 네이버 지도, name: naver_map, widget: string}, {label: Google 지도, name: google_maps, widget: string}, {label: 네이버 블로그, name: naver_blog, widget: string}, {label: 기존 홈페이지, name: homepage_old, widget: string}, {label: 인스타그램, name: instagram, widget: string}]}
-          - {label: 검색 인증코드, name: verification, widget: object, fields: [{label: 네이버, name: naver, widget: string}, {label: 구글, name: google, widget: string}]}
+    - label: 도메인
+      name: domain
+      widget: string
+    - label: 대표전화
+      name: phone
+      widget: string
+    - label: 주소
+      name: address
+      widget: string
+    - label: 소개
+      name: intro
+      widget: text
+    - label: 점심시간
+      name: lunch
+      widget: string
+    - label: 휴진
+      name: closed
+      widget: string
+    - label: 진료시간
+      name: hours
+      widget: list
+      fields:
+      - label: 표시
+        name: label
+        widget: string
+      - label: 요일(영문)
+        name: days
+        widget: list
+      - label: 시작
+        name: open
+        widget: string
+      - label: 종료
+        name: close
+        widget: string
+    - label: 링크
+      name: links
+      widget: object
+      fields:
+      - label: 네이버 예약
+        name: naver_booking
+        widget: string
+      - label: 카카오 채널
+        name: kakao_channel
+        widget: string
+      - label: 네이버 지도
+        name: naver_map
+        widget: string
+      - label: Google 지도
+        name: google_maps
+        widget: string
+      - label: 네이버 블로그
+        name: naver_blog
+        widget: string
+      - label: 기존 홈페이지
+        name: homepage_old
+        widget: string
+      - label: 인스타그램
+        name: instagram
+        widget: string
+    - label: 검색 인증코드
+      name: verification
+      widget: object
+      fields:
+      - label: 네이버
+        name: naver
+        widget: string
+      - label: 구글
+        name: google
+        widget: string
+display_url: https://yonseiacro-preview.netlify.app
