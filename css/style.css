@@ -118,3 +118,5 @@ body.home header.site:not(.scrolled) .lc{display:none}body.home header.site:not(
 .tags button.on{background:var(--ac);border-color:var(--ac)}footer.site{background:var(--acd)}
 @media(max-width:640px){.logo img{height:32px}}
 .flinks{align-content:start}
+.blog-layout.one{grid-template-columns:1fr}.empty{text-align:center;padding:80px 20px;border-top:2px solid var(--ink)}.empty .eyebrow{justify-content:center}.empty h2{font-size:1.8rem;font-weight:800;margin:0 0 10px}.empty p{color:var(--sub)}
+.faq+.faq{margin-top:56px}

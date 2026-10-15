@@ -295,4 +295,28 @@ collections:
       - label: 구글
         name: google
         widget: string
+  - label: 자주 묻는 질문(FAQ)
+    name: faq
+    file: data/faq.json
+    format: json
+    fields:
+    - label: 분류
+      name: groups
+      widget: list
+      summary: '{{fields.category}}'
+      fields:
+      - label: 분류명
+        name: category
+        widget: string
+      - label: 질문 목록
+        name: items
+        widget: list
+        summary: '{{fields.q}}'
+        fields:
+        - label: 질문
+          name: q
+          widget: string
+        - label: 답변
+          name: a
+          widget: text
 display_url: https://yonseiacro-preview.netlify.app

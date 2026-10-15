@@ -29,28 +29,5 @@
 - [치아미백](https://yonseiacro-preview.netlify.app/treatments/whitening.html): 치아의 착색이나 변색을 제거하고 밝고 하얀 치아색을 되찾기 위한 시술입니다.
 - [턱관절 치료](https://yonseiacro-preview.netlify.app/treatments/tmj.html): 턱관절 질환의 원인을 찾아서 예방하고 관리하는 프로그램을 제공합니다.
 
-## 블로그 (치료 정보)
-- [일산 대화역 치아미백｜커피 착색과 누런 치아, 미백 전 확인할 사항](https://yonseiacro-preview.netlify.app/blog/posts/naver-224440159680.html) (2026-10-14)
-- [일산 대화역 치과 ｜ “어금니가 뻥 뚫렸어요” 충치로 절반 이상 깨진 치아, 결국 임플란트까지](https://yonseiacro-preview.netlify.app/blog/posts/naver-224426931327.html) (2026-10-02)
-- [일산 대화역 치과 ｜ 앞니 충치가 심하다면? 크라운 치료가 필요한 경우](https://yonseiacro-preview.netlify.app/blog/posts/naver-224415891827.html) (2026-09-26)
-- [일산 대화역 치과 ｜ 타원 교정 후 유지장치 탈락, 재부착 가능할까요?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224400833503.html) (2026-09-14)
-- [대화역 치과 ｜ 사랑니 뿌리가 휘어있다면? CT로 확인하는 사랑니, 이런 경우도 당일발치 가능합니다](https://yonseiacro-preview.netlify.app/blog/posts/naver-224398449046.html) (2026-09-08)
-- [일산 치과 ｜ 대화역 당일 인레이 제작, 오전 치료 후 오후에 부착할 수 있을까요?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224398401342.html) (2026-09-02)
-- [대화역 레진치료｜앞니가 깨졌다면? 앞니 레진 당일치료 가능합니다.](https://yonseiacro-preview.netlify.app/blog/posts/naver-224391949959.html) (2026-08-27)
-- [일산 대화역 치과 치아미백 ｜ 음식으로 인한 착색, 어두운 치아가 고민이신가요?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224376374463.html) (2026-08-12)
-- [대화역 소아검진치과 ｜ 중요한 우리아이 첫 치과, 평생 주치의가 되겠습니다](https://yonseiacro-preview.netlify.app/blog/posts/naver-224368569005.html) (2026-08-07)
-- [대화역 턱관절 통증, 치과에서 검진부터 턱관절 보톡스까지](https://yonseiacro-preview.netlify.app/blog/posts/naver-224364901879.html) (2026-08-01)
-- [대화역치과 | 크라운를 했는데 음식물이 계속 낀다면?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224361761153.html) (2026-07-29)
-- [대화역치과｜당일 스케일링 및 검진 가능할까요? 스케일링부터 구강검진까지 한 번에 !](https://yonseiacro-preview.netlify.app/blog/posts/naver-224356658351.html) (2026-07-24)
-- [대화역치과｜스포츠 마우스피스, 치과에서 맞추어야 될까?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224356834115.html) (2026-07-24)
-- [대화역치과 | 임플란트 하고 나서 자꾸 혀를 씹어요 — 왜 그럴까요?](https://yonseiacro-preview.netlify.app/blog/posts/naver-224354256920.html) (2026-07-22)
 
-## 임상 케이스
 
-## 치과 소식
-- [연세아크로치과, 이름에 담긴 뜻 – 왜 '아크로'일까요?](https://yonseiacro-preview.netlify.app/news/naver-224382421030.html) (2026-08-18)
-- [대화역치과 | 웨딩스냅 프로필사진 앞두고 고민이라면? '스냅아르떼'](https://yonseiacro-preview.netlify.app/news/naver-224361507575.html) (2026-07-29)
-- [대화역에서 믿고 찾을 수 있는 일산 치과, 연세아크로치과를 소개합니다.](https://yonseiacro-preview.netlify.app/news/naver-224351882531.html) (2026-07-20)
-- [대화역6번출구치과｜전원 치과위생사로 구성된 진료팀, 왜 중요할까요?](https://yonseiacro-preview.netlify.app/news/naver-224351900666.html) (2026-07-20)
-- [레지던트 시절 틀니 환자분이 보내주신 화환](https://yonseiacro-preview.netlify.app/news/naver-224350153237.html) (2026-07-18)
-- [일산서구 대화역 치과, 연세아크로치과의원입니다.](https://yonseiacro-preview.netlify.app/news/naver-224339005515.html) (2026-07-07)
