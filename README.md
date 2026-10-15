@@ -40,3 +40,7 @@ python3 -m http.server 8000   # http://localhost:8000
 
 ## 남은 확인 항목
 `[도메인]`, 네이버/구글 인증코드, 우편번호, 인스타그램 URL, 임상 케이스 치료기간, GitHub 저장소(OAuth 사용 시).
+
+## 지도 (네이버 지도)
+네이버 지도 페이지는 iframe 삽입을 막고 있어서(X-Frame-Options: DENY) 기본으로는 **네이버 정적 지도 이미지**(`assets/clinic/map-static.png`, 클릭 시 네이버 지도 플레이스로 이동)를 보여줍니다.
+움직이는 지도를 원하면: 네이버 클라우드 플랫폼 → AI·NAVER API → Maps(Dynamic Map) 앱 등록 → 서비스 URL에 실제 도메인과 `*.netlify.app` 등록 → 발급된 **Client ID**를 `data/clinic.json`의 `naver_maps_client_id`에 넣고 빌드. 그러면 `js/site.js`가 Naver Maps JS API v3를 불러와 지도+마커로 바꿉니다.

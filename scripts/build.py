@@ -36,7 +36,7 @@ def faq_html(qs): return '<section class="faq"><h2>자주 묻는 질문</h2>'+''
 HOURS_TXT=' / '.join(f"{h['label']} {h['open']}~{h['close']}" for h in C['hours'])
 BASE_FAQ=[("연세아크로치과의원 진료시간은 어떻게 되나요?",f"{HOURS_TXT}. 평일 점심시간 {C['lunch']}, {C['closed']}입니다."),
  ("연세아크로치과의원은 어디에 있나요?",f"{C['address']}. {C['directions']['subway']}에 있습니다."),
- ("주차가 가능한가요?",C['directions']['car']+'.'),
+ ("주차가 가능한가요?",C['directions']['car']),
  ("예약은 어떻게 하나요?",f"대표전화 {C['phone']} 또는 네이버 예약, 카카오톡 채널로 예약 문의하실 수 있습니다.")]
 def head(title,desc,path,img='/assets/clinic/interior-1.jpg',typ='website',noindex=False,extra=''):
   v=C['verification']
@@ -75,7 +75,6 @@ w('cases/cases.json',J([{k:c.get(k) for k in ('slug','title','date','treatment',
 docs=''.join(f'<article class="doc" id="doctor-{i}"><img src="{d["photo"]}" alt="{d["role"]} {d["name"]}" loading="lazy"><div><p class="role">{d["role"]}</p><h3>{d["name"]}</h3><ul>'+''.join(f'<li>{E(x)}</li>' for x in d['career'])+'</ul></div></article>' for i,d in enumerate(C['doctors']))
 tr=''.join(f'<a class="card" href="/treatments/{t["id"]}.html"><h3>{t["name"]}</h3><p>{t["text"]}</p></a>' for t in C['treatments'])
 hrs=''.join(f'<tr><th>{h["label"]}</th><td>{h["open"]} ~ {h["close"]}</td></tr>' for h in C['hours'])+f'<tr><th>점심시간</th><td>{C["lunch"]}</td></tr><tr><th>휴진</th><td>{C["closed"]}</td></tr>'
-gmap=f'https://www.google.com/maps?q={C["geo"]["lat"]},{C["geo"]["lng"]}&z=17&output=embed'
 home=head(f'{C["name"]} | 대화역 6번 출구 일산서구 치과','대화역 6번 출구 앞 연세아크로치과의원. 보건복지부 인증 치과보철과·치과보존과·통합치의학과 전문의 진료. 임플란트, 충치치료, 신경치료, 심미보철, 틀니, 치아미백. 화·목 야간진료, 토요일 진료.','/')+f'''
 <section class="hero"><div class="wrap"><p class="eyebrow light">YONSEI ACRO DENTAL CLINIC</p><h1>처음부터 끝까지,<br><em>대표원장</em>이 책임집니다.</h1><p class="hsub">{C["intro"]}</p>{booking_box()}
 <dl class="hstats"><div><dt>SPECIALIST</dt><dd>보건복지부 인증 보철과·보존과 전문의</dd></div><div><dt>LOCATION</dt><dd>3호선 대화역 6번 출구 바로 앞</dd></div><div><dt>HOURS</dt><dd>화·목 야간 20:30 · 토 14:00까지</dd></div></dl></div></section>
@@ -90,7 +89,7 @@ home=head(f'{C["name"]} | 대화역 6번 출구 일산서구 치과','대화역 
 <h3>진료시간</h3><ul class="hlist">'''+''.join(f'<li>{h["label"]} <b>{h["open"]} – {h["close"]}</b></li>' for h in C['hours'])+f'''</ul><p class="muted">평일 점심 {C["lunch"]} · {C["closed"]}</p>
 <h3>실제 평가</h3><p>환자분들이 남긴 후기를 네이버·구글에서 직접 확인해 보세요.</p>
 <div class="pills"><a class="pill nv" href="{L["naver_map"]}?placePath=/review" target="_blank" rel="noopener">네이버 플레이스 리뷰 →</a><a class="pill gg" href="{L["google_maps"]}" target="_blank" rel="noopener">구글 리뷰 →</a><a class="pill ol" href="tel:{C["phone"]}">전화 {C["phone"]}</a></div></div>
-<div class="vmap"><iframe title="연세아크로치과 위치 Google 지도" src="{gmap}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><p class="maplinks"><a href="{L["naver_map"]}" target="_blank" rel="noopener">네이버 지도로 보기</a><a href="{L["google_maps"]}" target="_blank" rel="noopener">Google 지도로 보기</a></p></div></div></div></section>
+<div class="vmap"><div id="nmap" data-key="{C.get('naver_maps_client_id','')}" data-lat="{C['geo']['lat']}" data-lng="{C['geo']['lng']}"><a href="{L["naver_map"]}" target="_blank" rel="noopener" class="nstatic"><img src="/assets/clinic/map-static.png" alt="연세아크로치과 위치 - 대화역 6번 출구 앞 네이버 지도" loading="lazy"><span>네이버 지도에서 크게 보기 →</span></a></div><p class="maplinks"><a href="{L["naver_map"]}" target="_blank" rel="noopener">네이버 지도로 보기</a><a href="{L["google_maps"]}" target="_blank" rel="noopener">구글 지도로 보기</a></p></div></div></div></div></section>
 <section class="reveal"><div class="wrap narrow"><p class="eyebrow">FAQ</p>{faq_html(BASE_FAQ)}</div></section>
 '''+ld(clinic_ld(),*physician_ld(),faq_ld(BASE_FAQ),{"@context":"https://schema.org","@type":"WebSite","name":C['name'],"url":D+'/',"inLanguage":"ko-KR"})+foot()
 w('index.html',home)
