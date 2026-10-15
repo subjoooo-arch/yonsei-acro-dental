@@ -68,6 +68,7 @@ BASE_FAQ=[("연세아크로치과의원 진료시간은 어떻게 되나요?",f"
  ("연세아크로치과의원은 어디에 있나요?",f"{C['address']}. {C['directions']['subway']}에 있습니다."),
  ("주차가 가능한가요?",C['directions']['car']),
  ("예약은 어떻게 하나요?",f"대표전화 {C['phone']} 또는 네이버 예약, 카카오톡 채널로 예약 문의하실 수 있습니다.")]
+CSS=re.sub(r'\s*\n\s*','',open(f'{R}/css/style.css').read())
 FONT='https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css'
 def verif():
   o=''
@@ -82,7 +83,7 @@ def head(title,desc,path,img='/assets/clinic/interior-1.jpg',typ='website',noind
 <meta property="og:type" content="{typ}"><meta property="og:site_name" content="{C['name']}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{D}{path}"><meta property="og:image" content="{D}{img}"><meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{D}{img}">
 <meta name="geo.region" content="KR-41"><meta name="geo.position" content="{C['geo']['lat']};{C['geo']['lng']}">
-<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/assets/favicon-192.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="theme-color" content="#1f5aa6"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preload" as="style" href="{FONT}" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="{FONT}"></noscript>{'<link rel="preload" as="image" href="/assets/clinic/interior-1.webp" fetchpriority="high">' if path=="/" else ""}<link rel="stylesheet" href="/css/style.css">{extra}</head><body class="{"home" if path=="/" else "sub"}">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/assets/favicon-192.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="theme-color" content="#1f5aa6"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preload" as="style" href="{FONT}" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="{FONT}"></noscript>{'<link rel="preload" as="image" href="/assets/clinic/interior-1.webp" fetchpriority="high">' if path=="/" else ""}<style>{CSS}</style>{extra}</head><body class="{"home" if path=="/" else "sub"}">
 <header class="site"><div class="wrap"><a class="logo" href="/">{C['name']}</a><nav aria-label="주 메뉴"><a href="/#doctors">의료진</a><a href="/treatments/">진료과목</a><a href="/blog/">블로그</a><a href="/cases/">임상 케이스</a><a href="/news/">치과 소식</a><a href="/about/">병원 정보</a><a href="/#location">오시는 길</a></nav><a class="hbtn" href="{L['naver_booking']}" target="_blank" rel="noopener">예약하기</a></div></header><main>'''
 def foot():
   return f'''</main><section class="ctaband"><div class="wrap"><div><p class="eyebrow light">예약 · 상담</p><h2>아픈 곳이 없어도,<br><em>궁금한 점부터</em> 편하게<br>물어보세요.</h2><p>전문의가 현재 상태를 정확히 설명드리고,<br>꼭 필요한 치료만 함께 정하겠습니다.</p></div>
