@@ -76,7 +76,7 @@ def verif():
     if C.get(k): o+=f'<meta name="{n}" content="{E(C[k])}">'
   return o
 def head(title,desc,path,img='/assets/brand/og-image.jpg',typ='website',noindex=False,extra=''):
-  return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>if(/(invite|recovery|confirmation|email_change)_token=/.test(location.hash))location.replace('/admin/'+location.hash)</script>
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{D}{path}">
 {'<meta name="robots" content="noindex,follow">' if noindex else '<meta name="robots" content="index,follow,max-image-preview:large">'}
 {verif()}
