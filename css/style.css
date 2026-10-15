@@ -1,4 +1,4 @@
-:root{--ink:#141b24;--sub:#5b6573;--line:#e3e7ec;--ac:#1f5aa6;--ac2:#3f86e0;--acd:#0f2f5c;--tint:#f1f5fa;--gray:#f5f6f7;--nv:#03c75a;--kk:#fee500;--gg:#4285f4;--r:14px}
+:root{--ink:#141b24;--sub:#5b6573;--line:#e3e7ec;--ac:#1f5aa6;--ac2:#3f86e0;--acd:#0f2f5c;--tint:#f1f5fa;--gray:#f5f6f7;--nv:#008a3e;--kk:#fee500;--gg:#1a5fd0;--r:14px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;font-family:Pretendard,"Pretendard Variable",-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;color:var(--ink);line-height:1.75;word-break:keep-all;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
 a{color:inherit;text-decoration:none}img{max-width:100%;height:auto;display:block}.wrap{max-width:1240px;margin:0 auto;padding:0 32px}.narrow{max-width:860px}
@@ -22,7 +22,7 @@ section{padding:110px 0}.cream{background:var(--tint)}.gray,.alt{background:var(
 .tlink{display:inline-flex;gap:6px;font-weight:700;border-bottom:2px solid currentColor;padding-bottom:3px;font-size:.95rem;margin-top:16px}
 .shead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:34px}.shead h2{margin:0}.shead .tlink{margin:0 0 10px}
 /* hero */
-.hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;color:#fff;padding:160px 0 56px;background:linear-gradient(180deg,rgba(10,18,30,.35),rgba(10,18,30,.82)),url(/assets/clinic/interior-1.jpg) center/cover}
+.hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;color:#fff;padding:160px 0 56px;background:linear-gradient(180deg,rgba(10,18,30,.35),rgba(10,18,30,.82)),url(/assets/clinic/interior-1.webp) center/cover}
 .hero h1{font-size:clamp(2.4rem,5.6vw,4.7rem);font-weight:800;line-height:1.14;letter-spacing:-.045em;margin:0 0 22px}.hero h1 em{color:#8ec1ff}
 .hsub{max-width:620px;opacity:.88;font-size:1.04rem;margin:0}
 .hstats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:56px;border-top:1px solid rgba(255,255,255,.25);margin:56px 0 0;padding-top:22px}
@@ -106,5 +106,6 @@ footer.site{background:#0d131b;color:#8b95a3;padding:60px 0 100px;font-size:.88r
 .faq{padding:0}.faq h2{margin-top:0}
 #nmap{width:100%;min-height:440px;border-radius:20px;overflow:hidden;background:#e8edf2;position:relative}#nmap.live{height:440px}
 .nstatic{display:block;height:100%;position:relative}.nstatic img{width:100%;height:440px;object-fit:cover}
-.nstatic span{position:absolute;right:16px;bottom:16px;background:#03c75a;color:#fff;font-weight:700;padding:10px 18px;border-radius:999px;font-size:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.nstatic span{position:absolute;right:16px;bottom:16px;background:var(--nv);color:#fff;font-weight:700;padding:10px 18px;border-radius:999px;font-size:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 @media(max-width:640px){#nmap,.nstatic img,#nmap.live{min-height:0;height:280px}}
+.fact{border-top:1px solid var(--line);padding:16px 0}.fact h3{margin:0 0 6px}.fact ul{margin:0;padding-left:18px;color:var(--sub)}

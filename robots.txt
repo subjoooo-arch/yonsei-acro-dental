@@ -46,4 +46,4 @@ User-agent: CCBot
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://[도메인]/sitemap.xml
+Sitemap: https://yonseiacro-preview.netlify.app/sitemap.xml

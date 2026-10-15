@@ -31,7 +31,7 @@ python3 -m http.server 8000   # http://localhost:8000
 ### Cloudflare Pages
 빌드 명령 `pip install -r requirements.txt && python3 scripts/build.py`, 출력 디렉터리 `/`. 관리자 로그인은 Netlify Identity를 쓸 수 없으므로 `admin/config.yml`에서 `github` 백엔드로 바꾸고 GitHub OAuth 앱 + OAuth 프록시(예: decap-proxy Worker)를 설정해야 합니다.
 ### 도메인 연결 후
-`data/clinic.json`의 `domain`을 실제 주소로, `verification`에 네이버 서치어드바이저·구글 서치콘솔 코드를 넣고 빌드. 두 곳에 `sitemap.xml` 제출.
+`data/clinic.json`의 `site_url` 한 줄만 실제 도메인으로 바꾸면 전체 반영됩니다. 검색엔진 등록은 `SEO_등록가이드.md` 참고.
 
 ## ⚠️ 의료광고법 주의 (반드시 확인)
 - 의료법 제56조: 치료 전·후 사진, 치료경험담, 과장·비교 광고 등은 제한되며, 홈페이지/블로그 내용도 의료광고 심의(대한치과의사협회 의료광고심의위원회) 대상이 될 수 있습니다.

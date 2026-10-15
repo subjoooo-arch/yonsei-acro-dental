@@ -1,15 +1,14 @@
 {
+ "site_url": "https://yonseiacro-preview.netlify.app",
  "name": "연세아크로치과의원",
  "name_en": "Yonsei Acro Dental Clinic",
- "domain": "https://[도메인]",
  "tagline": "연세아크로치과 대표원장 책임진료",
  "intro": "연세대학교 출신 보철과 전문의 대표원장이 처음부터 끝까지 책임지고 진료합니다. 다양한 임상 경험과 치과보철과 전문의 노하우로 임플란트, 심미보철, 틀니, 자연치아 보존, 복합 교합 문제를 체계적으로 진료합니다.",
  "address": "경기도 고양시 일산서구 중앙로 1564 5층 502호, 503호",
  "address_parts": {
   "region": "경기도",
   "locality": "고양시 일산서구",
-  "street": "중앙로 1564 5층 502호, 503호",
-  "postal": "[우편번호]"
+  "street": "중앙로 1564 5층 502호, 503호"
  },
  "geo": {
   "lat": 37.6762006,
@@ -60,8 +59,7 @@
   "naver_map": "https://map.naver.com/p/entry/place/2041085282",
   "google_maps": "https://www.google.com/maps/place/?q=place_id:ChIJF5lYybOFfDUR36dHtXviqu0",
   "naver_blog": "https://blog.naver.com/yonseiacro",
-  "homepage_old": "https://www.yonseiacro.com/",
-  "instagram": "[인스타그램 URL]"
+  "homepage_old": "https://www.yonseiacro.com/"
  },
  "doctors": [
   {
@@ -173,9 +171,10 @@
   "3D printer 및 원내기공실",
   "PHL 레이저"
  ],
- "verification": {
-  "naver": "[네이버 서치어드바이저 인증코드]",
-  "google": "[구글 서치콘솔 인증코드]"
- },
- "naver_maps_client_id": "[NAVER_MAPS_CLIENT_ID]"
+ "naver_maps_client_id": "",
+ "naver_verification": "",
+ "google_verification": "",
+ "bing_verification": "",
+ "default_author": 0,
+ "telephone_intl": "+82-31-922-2888"
 }
