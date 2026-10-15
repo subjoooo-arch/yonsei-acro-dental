@@ -1,0 +1,12 @@
+(()=>{const inp=document.getElementById('fq');if(!inp)return;const x=document.getElementById('fqx'),n=document.getElementById('fqn'),emp=document.getElementById('fqempty'),secs=[...document.querySelectorAll('#fqbody .faq')],nav=document.querySelector('.page .pills');
+const items=[...document.querySelectorAll('#fqbody details')].map(d=>{const s=d.querySelector('summary'),p=d.querySelector('p');return{d,s,p,sq:s.textContent,pa:p.textContent}});
+const norm=t=>t.toLowerCase().replace(/\s+/g,'');const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hl=(t,ws)=>{if(!ws.length)return esc(t);const re=new RegExp('('+ws.map(w=>w.split('').map(c=>c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s*')).join('|')+')','gi');return esc(t).replace(new RegExp(re.source,'gi'),m=>'<mark>'+m+'</mark>')};
+const run=(push=true)=>{const raw=inp.value.trim(),ws=raw.split(/\s+/).filter(Boolean).map(w=>w.toLowerCase());let c=0;
+ items.forEach(it=>{const t=norm(it.sq+' '+it.pa),ok=ws.every(w=>t.includes(norm(w)));it.d.hidden=!ok;if(ok)c++;it.s.innerHTML='<span>'+hl(it.sq,ws)+'</span>';it.p.innerHTML=hl(it.pa,ws);it.d.open=!!ws.length&&ok});
+ secs.forEach(s=>s.hidden=![...s.querySelectorAll('details')].some(d=>!d.hidden));if(nav)nav.hidden=!!ws.length;
+ x.hidden=!raw;emp.hidden=!(ws.length&&!c);n.textContent=ws.length?`'${raw}' 검색 결과 ${c}개`:`전체 질문 ${items.length}개`;
+ if(push){const u=new URL(location);raw?u.searchParams.set('q',raw):u.searchParams.delete('q');history.replaceState(null,'',u)}};
+inp.addEventListener('input',()=>run());x.onclick=()=>{inp.value='';run();inp.focus()};
+document.querySelectorAll('.chipq').forEach(b=>b.onclick=()=>{inp.value=b.textContent;run();inp.focus()});
+inp.value=new URLSearchParams(location.search).get('q')||'';run(false)})();

@@ -125,3 +125,8 @@ body.home header.site:not(.scrolled) .lc{display:none}body.home header.site:not(
 .ecard figcaption{padding:10px 12px;font-size:.9rem;font-weight:700;color:var(--ink);text-align:center}
 @media(max-width:1000px){.egal{grid-template-columns:repeat(3,1fr)}}@media(max-width:640px){.egal{grid-template-columns:repeat(2,1fr)}}
 .gallery{grid-template-columns:repeat(3,1fr)}@media(max-width:640px){.gallery{grid-template-columns:1fr}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.fsearch{position:relative;margin:10px 0 12px}
+.fsearch input{width:100%;font:inherit;font-size:1.05rem;padding:16px 50px 16px 20px;border:2px solid var(--ink);border-radius:999px;outline:none}.fsearch input:focus{border-color:var(--ac2);box-shadow:0 0 0 4px rgba(91,120,150,.18)}
+.fsearch input::-webkit-search-cancel-button{display:none}#fqx{position:absolute;right:14px;top:50%;transform:translateY(-50%);border:0;background:var(--gray);width:30px;height:30px;border-radius:50%;font-size:1.1rem;cursor:pointer}
+.chipsq{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}.chipq{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:inherit;font-size:.86rem;cursor:pointer}.chipq:hover{border-color:var(--ac)}
+mark{background:#f3dfcf;color:inherit;padding:0 2px;border-radius:3px}#fqempty .bbox{justify-content:center}[hidden]{display:none!important}
