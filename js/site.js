@@ -2,5 +2,12 @@
 const io='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12}):null;
 document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'))})();
 (()=>{const m=document.getElementById('nmap');if(!m)return;const k=m.dataset.key;if(!k||k.startsWith('['))return;
-const s=document.createElement('script');s.src='https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId='+encodeURIComponent(k);
-s.onload=()=>{try{const p=new naver.maps.LatLng(+m.dataset.lat,+m.dataset.lng);m.innerHTML='';m.classList.add('live');const map=new naver.maps.Map(m,{center:p,zoom:17});new naver.maps.Marker({position:p,map})}catch(e){}};document.head.appendChild(s)})();
+const fallback=m.innerHTML;let tried=0,done=false;
+const restore=()=>{m.classList.remove('live');m.innerHTML=fallback};
+const load=p=>{tried++;const s=document.createElement('script');s.src='https://oapi.map.naver.com/openapi/v3/maps.js?'+p+'='+encodeURIComponent(k);
+ s.onerror=()=>{tried<2?load('ncpClientId'):restore()};
+ s.onload=()=>{try{const pos=new naver.maps.LatLng(+m.dataset.lat,+m.dataset.lng);const box=document.createElement('div');box.style.cssText='width:100%;height:100%';m.innerHTML='';m.appendChild(box);m.classList.add('live');
+  const map=new naver.maps.Map(box,{center:pos,zoom:17,zoomControl:true});new naver.maps.Marker({position:pos,map,title:'연세아크로치과의원'});done=true}catch(e){restore()}};
+ document.head.appendChild(s)};
+window.navermap_authFailure=()=>{if(tried<2){delete window.naver;load('ncpClientId')}else restore()};
+const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){io.disconnect();load('ncpKeyId')}},{rootMargin:'300px'});io.observe(m)})();
