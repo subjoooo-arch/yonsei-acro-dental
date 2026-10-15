@@ -1,0 +1,174 @@
+#!/usr/bin/env python3
+"""content/*.md + data/clinic.json -> 정적 HTML, posts.json, cases.json, sitemap.xml, llms.txt 생성.
+사용: python3 scripts/build.py   (필요: pip install -r requirements.txt)"""
+import os, json, re, glob, html, shutil, datetime
+import yaml, markdown
+R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+C=json.load(open(f'{R}/data/clinic.json')); D=C['domain'].rstrip('/'); L=C['links']
+E=html.escape; J=lambda o: json.dumps(o,ensure_ascii=False,indent=1).replace('</','<\\/')
+def load(d):
+  out=[]
+  for f in sorted(glob.glob(f'{R}/content/{d}/*.md')):
+    t=open(f).read(); m=re.match(r'---\n(.*?)\n---\n?(.*)',t,re.S)
+    fm=yaml.safe_load(m[1]) or {}; fm['body']=m[2]; fm['slug']=os.path.basename(f)[:-3]
+    fm['date']=str(fm.get('date',''))[:10]; fm['summary']=re.sub(r'\s+',' ',str(fm.get('summary','') or '')).strip()
+    out.append(fm)
+  return sorted(out,key=lambda x:x['date'],reverse=True)
+def w(p,s):
+  p=f'{R}/{p}'; os.makedirs(os.path.dirname(p),exist_ok=True); open(p,'w').write(s)
+def ld(*objs): return ''.join(f'<script type="application/ld+json">{J(o)}</script>' for o in objs)
+CLINIC_ID=D+'/#clinic'
+def clinic_ld():
+  return {"@context":"https://schema.org","@type":["Dentist","MedicalClinic"],"@id":CLINIC_ID,"name":C['name'],"alternateName":C['name_en'],
+   "url":D+'/',"telephone":"+82-31-922-2888","image":D+'/assets/clinic/interior-1.jpg',"logo":D+'/assets/clinic/logo.png',
+   "address":{"@type":"PostalAddress","addressCountry":"KR","addressRegion":C['address_parts']['region'],"addressLocality":C['address_parts']['locality'],"streetAddress":C['address_parts']['street']},
+   "geo":{"@type":"GeoCoordinates","latitude":C['geo']['lat'],"longitude":C['geo']['lng']},
+   "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":h['days'],"opens":h['open'],"closes":h['close']} for h in C['hours']],
+   "medicalSpecialty":["Dentistry","Prosthodontics","Endodontics"],"availableService":[{"@type":"MedicalProcedure","name":t['name']} for t in C['treatments']],
+   "sameAs":[L['naver_map'],L['google_maps'],L['kakao_channel'],L['naver_blog'],L['naver_booking']],
+   "employee":[{"@id":D+f'/#doctor-{i}'} for i in range(len(C['doctors']))]}
+def physician_ld():
+  return [{"@context":"https://schema.org","@type":"Physician","@id":D+f'/#doctor-{i}',"name":d['name'],"jobTitle":d['role'],"medicalSpecialty":d['specialty'],
+    "description":' / '.join(d['career']),"image":D+d['photo'],"worksFor":{"@id":CLINIC_ID},"alumniOf":d['career'][1]} for i,d in enumerate(C['doctors'])]
+def crumbs(items): return {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
+def faq_ld(qs): return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in qs]}
+def faq_html(qs): return '<section class="faq"><h2>자주 묻는 질문</h2>'+''.join(f'<details><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q,a in qs)+'</section>'
+HOURS_TXT=' / '.join(f"{h['label']} {h['open']}~{h['close']}" for h in C['hours'])
+BASE_FAQ=[("연세아크로치과의원 진료시간은 어떻게 되나요?",f"{HOURS_TXT}. 평일 점심시간 {C['lunch']}, {C['closed']}입니다."),
+ ("연세아크로치과의원은 어디에 있나요?",f"{C['address']}. {C['directions']['subway']}에 있습니다."),
+ ("주차가 가능한가요?",C['directions']['car']+'.'),
+ ("예약은 어떻게 하나요?",f"대표전화 {C['phone']} 또는 네이버 예약, 카카오톡 채널로 예약 문의하실 수 있습니다.")]
+def head(title,desc,path,img='/assets/clinic/interior-1.jpg',typ='website',noindex=False,extra=''):
+  v=C['verification']
+  return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{D}{path}">
+{'<meta name="robots" content="noindex,follow">' if noindex else '<meta name="robots" content="index,follow,max-image-preview:large">'}
+<meta name="naver-site-verification" content="{E(v['naver'])}"><meta name="google-site-verification" content="{E(v['google'])}">
+<meta property="og:type" content="{typ}"><meta property="og:site_name" content="{C['name']}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{D}{path}"><meta property="og:image" content="{D}{img}"><meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{D}{img}">
+<meta name="geo.region" content="KR-41"><meta name="geo.position" content="{C['geo']['lat']};{C['geo']['lng']}">
+<link rel="icon" href="/assets/clinic/logo.png"><link rel="stylesheet" href="/css/style.css">{extra}</head><body>
+<header class="site"><div class="wrap"><a class="logo" href="/">{C['name']}</a><nav aria-label="주 메뉴"><a href="/#doctors">의료진</a><a href="/treatments/">진료과목</a><a href="/blog/">블로그</a><a href="/cases/">임상 케이스</a><a href="/news/">치과 소식</a><a href="/#location">오시는 길</a></nav><a class="hbtn" href="{L['naver_booking']}" target="_blank" rel="noopener">예약하기</a></div></header><main>'''
+def foot():
+  return f'''</main><footer class="site"><div class="wrap fgrid"><div><strong>{C['name']}</strong><address>주소: {C['address']}<br>대표전화: <a href="tel:{C['phone']}">{C['phone']}</a><br>대표: {C['ceo']} · 사업자등록번호: {C['biz_no']}</address></div>
+<div class="flinks"><a href="{L['naver_booking']}" target="_blank" rel="noopener">네이버 예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener">카카오톡 채널 상담·예약</a><a href="{L['naver_map']}" target="_blank" rel="noopener">네이버 지도</a><a href="{L['google_maps']}" target="_blank" rel="noopener">Google 지도</a><a href="{L['naver_blog']}" target="_blank" rel="noopener">네이버 블로그</a></div></div>
+<div class="wrap copy">© {datetime.date.today().year} Yonsei Acro Dental Clinic. 본 사이트의 의료 정보는 일반적인 안내이며, 치료 결과는 개인에 따라 다를 수 있습니다.</div></footer>
+<div class="mbar"><a href="tel:{C['phone']}">📞 전화</a><a href="{L['naver_booking']}" target="_blank" rel="noopener" class="nv">N 네이버 예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener" class="kk">💬 카카오 예약</a></div></body></html>'''
+def card(p,base=None):
+  th=f'<img loading="lazy" src="{p["thumbnail"]}" alt="">' if p.get('thumbnail') else ''
+  return f'<a class="pcard" data-tag="{E(p["tag"])}" href="{p.get("url") or "/blog/posts/"+p["slug"]+".html"}">{th}<div><span class="tag">#{E(p["tag"])}</span><h3>{E(p["title"])}</h3><p>{E(p["summary"][:90])}…</p><time datetime="{p["date"]}">{p["date"].replace("-",". ")}</time></div></a>'
+def booking_box():
+  return f'<div class="bbox"><a class="btn" href="{L["naver_booking"]}" target="_blank" rel="noopener">네이버 예약</a><a class="btn kk" href="{L["kakao_channel"]}" target="_blank" rel="noopener">카카오톡 상담·예약</a><a class="btn ghost" href="tel:{C["phone"]}">{C["phone"]}</a></div>'
+def md(t): return markdown.markdown(t,extensions=['extra'])
+for d in ('blog/posts','news','cases'):
+  for f in glob.glob(f'{R}/{d}/*.html'): os.remove(f)
+blog=load('posts'); news=load('news'); cases=load('cases')
+for p in blog: p['url']=f'/blog/posts/{p["slug"]}.html'; p['category']='블로그'
+for p in news: p['url']=f'/news/{p["slug"]}.html'; p['category']='치과 소식'
+posts=blog+news
+for c in cases: c['public']=not c.get('review_required',True)
+# ---- data json
+w('blog/posts.json',J([{k:p.get(k) for k in ('slug','title','date','category','tag','summary','thumbnail','popular','url','source_url')} for p in posts]))
+w('cases/cases.json',J([{k:c.get(k) for k in ('slug','title','date','treatment','period','before','after','notes','review_required','post','source_url')} for c in cases]))
+# ---- home
+docs=''.join(f'<article class="doc" id="doctor-{i}"><img src="{d["photo"]}" alt="{d["role"]} {d["name"]}" loading="lazy"><div><p class="role">{d["role"]}</p><h3>{d["name"]}</h3><ul>'+''.join(f'<li>{E(x)}</li>' for x in d['career'])+'</ul></div></article>' for i,d in enumerate(C['doctors']))
+tr=''.join(f'<a class="card" href="/treatments/{t["id"]}.html"><h3>{t["name"]}</h3><p>{t["text"]}</p></a>' for t in C['treatments'])
+hrs=''.join(f'<tr><th>{h["label"]}</th><td>{h["open"]} ~ {h["close"]}</td></tr>' for h in C['hours'])+f'<tr><th>점심시간</th><td>{C["lunch"]}</td></tr><tr><th>휴진</th><td>{C["closed"]}</td></tr>'
+gmap=f'https://www.google.com/maps?q={C["geo"]["lat"]},{C["geo"]["lng"]}&z=17&output=embed'
+home=head(f'{C["name"]} | 대화역 6번 출구 일산서구 치과','대화역 6번 출구 앞 연세아크로치과의원. 보건복지부 인증 치과보철과·치과보존과·통합치의학과 전문의 진료. 임플란트, 충치치료, 신경치료, 심미보철, 틀니, 치아미백. 화·목 야간진료, 토요일 진료.','/')+f'''
+<section class="hero"><div class="wrap"><p class="eyebrow">일산서구 대화동 · 3호선 대화역 6번 출구 앞</p><h1>{C["tagline"]}</h1><p>{C["intro"]}</p>{booking_box()}</div></section>
+<section class="summary wrap" aria-label="한눈에 보기"><dl><div><dt>위치</dt><dd>{C["directions"]["subway"]}</dd></div><div><dt>진료</dt><dd>보건복지부 인증 치과보철과·치과보존과·통합치의학과 전문의</dd></div><div><dt>야간·주말</dt><dd>화·목 20:30까지, 토요일 14:00까지</dd></div><div><dt>전화</dt><dd><a href="tel:{C["phone"]}">{C["phone"]}</a></dd></div></dl></section>
+<section><div class="wrap"><h2 class="sec">연세아크로치과의 진료 원칙</h2><div class="grid">'''+''.join(f'<div class="card"><h3>{f["title"]}</h3><p>{f["text"]}</p></div>' for f in C['features'])+f'''</div></div></section>
+<section class="alt" id="doctors"><div class="wrap"><h2 class="sec">전문의 의료진 소개</h2><p class="lead">연세아크로치과는 보건복지부 인증 치과보철과 전문의, 치과보존과 전문의, 통합치의학과 전문의가 진료합니다.</p><div class="docs">{docs}</div></div></section>
+<section id="treat"><div class="wrap"><h2 class="sec">진료과목</h2><p class="lead">꼭 필요한 치료만 집중하여 권하며, 불필요한 치료로 어려움을 겪지 않도록 올바른 방향을 제시해드립니다.</p><div class="grid">{tr}</div></div></section>
+<section class="alt"><div class="wrap"><h2 class="sec">진료장비 · 진료공간</h2><div class="gallery"><img src="/assets/clinic/interior-1.jpg" alt="연세아크로치과 내부" loading="lazy"><img src="/assets/clinic/interior-2.jpg" alt="연세아크로치과 진료실" loading="lazy"><img src="/assets/clinic/interior-3.jpg" alt="연세아크로치과 대기실" loading="lazy"></div><ul class="chips">'''+''.join(f'<li>{e}</li>' for e in C['equipment'])+f'''</ul></div></section>
+<section><div class="wrap"><h2 class="sec">최근 블로그 · 임상 이야기</h2><div class="plist">{''.join(card(p) for p in blog[:3])}</div><p class="center"><a class="btn ghost" href="/blog/">블로그 전체 보기</a></p></div></section>
+<section class="alt" id="location"><div class="wrap"><h2 class="sec">진료시간 · 오시는 길</h2><div class="loc"><iframe title="연세아크로치과 위치 Google 지도" src="{gmap}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div><table class="hours">{hrs}</table><p><strong>주소</strong> {C["address"]}</p><p><strong>지하철</strong> {C["directions"]["subway"]}</p><p><strong>버스</strong> {C["directions"]["bus"]}</p><p><strong>자가용</strong> {C["directions"]["car"]}</p>
+<p class="maplinks"><a href="{L["naver_map"]}" target="_blank" rel="noopener">네이버 지도</a><a href="{L["google_maps"]}" target="_blank" rel="noopener">Google 지도</a></p>{booking_box()}</div></div></div></section>
+<section><div class="wrap narrow">{faq_html(BASE_FAQ)}</div></section>
+'''+ld(clinic_ld(),*physician_ld(),faq_ld(BASE_FAQ),{"@context":"https://schema.org","@type":"WebSite","name":C['name'],"url":D+'/',"inLanguage":"ko-KR"})+foot()
+w('index.html',home)
+# ---- list pages
+def list_page(path,title,h1,desc,items,crumb,tagfilter=True,base='/blog/posts/',cardf=card,extra_top=''):
+  tags=[]; [tags.append(x) for x in [p.get('tag') or p.get('treatment') for p in items] if x not in tags]
+  btn=('<div class="tags" id="tags"><button class="on">전체</button>'+''.join(f'<button>{E(t)}</button>' for t in tags)+'</div>') if tagfilter else ''
+  pop=[p for p in items if p.get('popular')][:5] or items[:5]
+  s=head(title,desc,path)+f'<div class="wrap page"><nav class="bc" aria-label="breadcrumb"><a href="/">홈</a> › {h1}</nav><h1 class="ptitle">{h1}</h1><p class="lead l">{desc}</p>{extra_top}{btn}<div class="blog-layout"><div class="plist" id="list">{"".join(cardf(p) for p in items) or "<p>아직 게시물이 없습니다.</p>"}</div><aside class="popular"><h2>인기 게시물</h2>'+''.join(f'<a href="{p.get("url") or base+p["slug"]+".html"}">{E(p["title"])}</a>' for p in pop)+f'</aside></div></div><script src="/js/filter.js"></script>'
+  s+=ld(crumbs([('홈','/'),(h1,path)]),{"@context":"https://schema.org","@type":"CollectionPage","name":title,"url":D+path,"isPartOf":{"@id":CLINIC_ID}})+foot(); w(path.lstrip('/')+'index.html',s)
+list_page('/blog/',f'블로그 | {C["name"]}','Blog','연세아크로치과 전문의가 직접 설명하는 치료 정보와 진료 이야기입니다.',blog,None)
+list_page('/news/',f'치과 소식 | {C["name"]}','치과 소식','연세아크로치과의 소식과 일상을 전합니다.',news,None,tagfilter=False,base='/news/')
+def case_card(c):
+  img=c.get('thumbnail') or c.get('after') or c.get('before'); th=f'<img loading="lazy" src="{img}" alt="">' if img else ''
+  badge='<span class="rev">검수 필요 · 비공개(noindex)</span>' if not c['public'] else ''
+  return f'<a class="pcard" data-tag="{E(c["treatment"])}" href="/cases/{c["slug"]}.html">{th}<div><span class="tag">#{E(c["treatment"])}</span>{badge}<h3>{E(c["title"])}</h3><p>치료기간: {E(str(c.get("period","")))}</p><time datetime="{c["date"]}">{c["date"].replace("-",". ")}</time></div></a>'
+for c in cases: c['url']=f'/cases/{c["slug"]}.html'
+list_page('/cases/',f'임상 케이스 | {C["name"]}','임상 케이스','연세아크로치과의 실제 진료 사례입니다. 치료 결과는 개인의 구강 상태에 따라 다를 수 있습니다.',cases,None,cardf=case_card,
+  extra_top='<p class="notice">※ 본 사례는 「의료법」 제56조 및 의료광고 심의 기준에 따라 게시되며, 치료 결과는 개인에 따라 다를 수 있습니다. 부작용·주의사항은 상담 시 안내드립니다.</p>')
+# ---- post pages
+def related(p): return [x for x in blog if x['tag']==p['tag'] and x['slug']!=p['slug']][:3]
+for p in posts:
+  isnews=p.get('category')=='치과 소식'; sec=('치과 소식','/news/') if isnews else ('블로그','/blog/')
+  img=p.get('thumbnail') or '/assets/clinic/interior-1.jpg'
+  qa=p.get('faq') or []; qs=[(q['q'],q['a']) for q in qa if q.get('q')]
+  s=head(f'{p["title"]} | {C["name"]}',p['summary'][:150],p['url'],img,'article')+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="{sec[1]}">{sec[0]}</a></nav>
+<header><a class="tag" href="{sec[1]}#{E(p["tag"])}">#{E(p["tag"])}</a><h1>{E(p["title"])}</h1><p class="meta"><time datetime="{p["date"]}">{p["date"].replace("-",". ")}</time> · 작성: {E(p.get("author") or C["name"])}</p></header>
+<aside class="tldr" aria-label="핵심 요약"><strong>한눈에 보기</strong><p><b>Q.</b> {E(p.get("question") or p["title"])}</p><p><b>A.</b> {E(p["summary"])}</p><p class="small">진료: {C["name"]} · {C["address"]} · {C["phone"]}</p></aside>
+<div class="body">{md(p["body"])}</div>{faq_html(qs) if qs else ""}
+{f'<p class="src">원문: <a href="{p["source_url"]}" target="_blank" rel="noopener">네이버 블로그</a></p>' if p.get("source_url") else ""}
+<div class="cta"><p>궁금한 점은 편하게 문의하세요.</p>{booking_box()}</div>
+{'<section class="rel"><h2>관련 글</h2><div class="plist">'+''.join(card(x) for x in related(p))+'</div></section>' if related(p) else ''}</article>'''
+  art={"@context":"https://schema.org","@type":"BlogPosting","headline":p['title'][:110],"description":p['summary'],"datePublished":p['date'],"dateModified":str(p.get('updated') or p['date']),
+   "image":D+img,"inLanguage":"ko-KR","mainEntityOfPage":D+p['url'],"author":{"@type":"Organization","name":C['name'],"@id":CLINIC_ID},"publisher":{"@id":CLINIC_ID},"about":{"@type":"MedicalProcedure","name":p['tag']}}
+  if p.get('source_url'): art['isBasedOn']=p['source_url']
+  s+=ld(art,crumbs([('홈','/'),(sec[0],sec[1]),(p['title'],p['url'])]),*( [faq_ld(qs)] if qs else []))+foot(); w(p['url'].lstrip('/'),s)
+# ---- case pages
+for c in cases:
+  ba=''.join(f'<figure><img src="{c[k]}" alt="{lbl}"><figcaption>{lbl}</figcaption></figure>' for k,lbl in (('before','치료 전'),('after','치료 후')) if c.get(k))
+  s=head(f'{c["title"]} | 임상 케이스 | {C["name"]}',c['summary'] or c['title'],c['url'],c.get('after') or c.get('before') or '/assets/clinic/interior-1.jpg','article',noindex=not c['public'])+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="/cases/">임상 케이스</a></nav>
+<header><span class="tag">#{E(c["treatment"])}</span><h1>{E(c["title"])}</h1><p class="meta">{c["date"].replace("-",". ")}</p></header>
+{'<p class="sample">⚠️ 검수 필요: 자동 가져온 사례입니다. 전/후 사진 선정과 의료광고 심의 확인 전까지 검색엔진 비공개(noindex)입니다.</p>' if not c['public'] else ''}
+<table class="hours"><tr><th>치료</th><td>{E(c["treatment"])}</td></tr><tr><th>치료기간</th><td>{E(str(c.get("period","")))}</td></tr><tr><th>참고</th><td>{E(str(c.get("notes","")))}</td></tr></table>
+<div class="ba">{ba}</div><div class="body">{md(c["body"])}</div>
+{f'<p><a class="btn ghost" href="{c["post"]}">관련 블로그 글 보기</a></p>' if c.get("post") else ""}
+<p class="notice">※ 치료 결과는 개인의 구강 상태에 따라 다를 수 있으며, 시술 후 부기·통증·감염 등 부작용이 발생할 수 있습니다.</p><div class="cta">{booking_box()}</div></article>'''
+  s+=ld(crumbs([('홈','/'),('임상 케이스','/cases/'),(c['title'],c['url'])]),{"@context":"https://schema.org","@type":"Article","headline":c['title'][:110],"datePublished":c['date'],"author":{"@id":CLINIC_ID},"publisher":{"@id":CLINIC_ID}})+foot()
+  w(c['url'].lstrip('/'),s)
+# ---- treatments
+ti=head(f'진료과목 | {C["name"]}','연세아크로치과 진료과목: '+', '.join(t['name'] for t in C['treatments']),'/treatments/')+'<div class="wrap page"><nav class="bc"><a href="/">홈</a> › 진료과목</nav><h1 class="ptitle">진료과목</h1><div class="grid">'+tr+'</div></div>'+ld(crumbs([('홈','/'),('진료과목','/treatments/')]))+foot()
+w('treatments/index.html',ti)
+for t in C['treatments']:
+  rel=[p for p in blog if p['tag']==t['tag']][:6]; rc=[c for c in cases if c['treatment']==t['tag'] and c['public']]
+  qs=[(f"연세아크로치과에서 {t['name']} 진료를 받을 수 있나요?",f"네. {t['text']} 보건복지부 인증 전문의가 진료합니다."),
+      (f"{t['name']} 상담은 어떻게 예약하나요?",f"대표전화 {C['phone']}, 네이버 예약 또는 카카오톡 채널로 예약하실 수 있습니다."),BASE_FAQ[0],BASE_FAQ[1]]
+  path=f'/treatments/{t["id"]}.html'
+  s=head(f'{t["name"]} | 대화역 {C["name"]}',f'{t["name"]} - {t["text"]} 대화역 6번 출구 앞 연세아크로치과.',path)+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="/treatments/">진료과목</a> › {t["name"]}</nav><h1>{t["name"]}</h1>
+<aside class="tldr"><strong>한눈에 보기</strong><p>{t["text"]}</p><p class="small">{C["name"]} · {C["address"]} · {C["phone"]}</p></aside>{faq_html(qs)}
+{'<section class="rel"><h2>관련 블로그 글</h2><div class="plist">'+''.join(card(x) for x in rel)+'</div></section>' if rel else ''}
+{'<section class="rel"><h2>임상 케이스</h2><div class="plist">'+''.join(case_card(x) for x in rc)+'</div></section>' if rc else ''}
+<div class="cta">{booking_box()}</div></article>'''
+  s+=ld(crumbs([('홈','/'),('진료과목','/treatments/'),(t['name'],path)]),faq_ld(qs),{"@context":"https://schema.org","@type":"MedicalWebPage","name":t['name'],"about":{"@type":"MedicalProcedure","name":t['name'],"description":t['text']},"publisher":{"@id":CLINIC_ID}})+foot()
+  w(path.lstrip('/'),s)
+# ---- sitemap / llms
+urls=['/','/treatments/','/blog/','/news/','/cases/']+[f'/treatments/{t["id"]}.html' for t in C['treatments']]+[p['url'] for p in posts]+[c['url'] for c in cases if c['public']]
+lm={p['url']:p['date'] for p in posts}
+w('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{D}{u}</loc>{"<lastmod>"+lm[u]+"</lastmod>" if u in lm else ""}</url>\n' for u in urls)+'</urlset>\n')
+w('robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\n\n'+''.join(f'User-agent: {b}\nAllow: /\nDisallow: /admin/\n\n' for b in ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-Web','PerplexityBot','Google-Extended','Applebot-Extended','Yeti','Bingbot','CCBot'])+f'Sitemap: {D}/sitemap.xml\n')
+llms=f"""# {C['name']} ({C['name_en']})
+
+> 경기도 고양시 일산서구 대화동, 3호선 대화역 6번 출구 바로 앞 롯데리아 건물 5층에 위치한 치과의원. 보건복지부 인증 치과보철과·치과보존과·통합치의학과 전문의가 진료합니다.
+
+## 기본 정보
+- 주소: {C['address']}
+- 대표전화: {C['phone']}
+- 진료시간: {HOURS_TXT} / 점심 {C['lunch']} / {C['closed']}
+- 주차: {C['directions']['car']}
+- 예약: 네이버 예약 {L['naver_booking']} · 카카오톡 채널 {L['kakao_channel']}
+- 지도: 네이버 {L['naver_map']} · Google {L['google_maps']}
+
+## 의료진
+"""+''.join(f"- {d['role']} {d['name']}: {', '.join(d['career'][:3])}\n" for d in C['doctors'])+"\n## 진료과목\n"+''.join(f"- [{t['name']}]({D}/treatments/{t['id']}.html): {t['text']}\n" for t in C['treatments'])+"\n## 블로그 (치료 정보)\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in blog[:15])+"\n## 임상 케이스\n"+''.join(f"- [{c['title']}]({D}{c['url']}) ({c['date']})\n" for c in cases if c['public'])+"\n## 치과 소식\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in news)
+w('llms.txt',llms)
+rd=[f'{u} {x["url"]} 301' for x in posts+cases for u in (x.get('redirect_from') or [])]
+w('_redirects','\n'.join(rd)+'\n')
+print(f'built: {len(blog)} blog, {len(news)} news, {len(cases)} cases')

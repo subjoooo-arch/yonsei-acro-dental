@@ -1,0 +1,58 @@
+{
+ "name": "연세아크로치과의원",
+ "name_en": "Yonsei Acro Dental Clinic",
+ "domain": "https://[도메인]",
+ "tagline": "연세아크로치과 대표원장 책임진료",
+ "intro": "연세대학교 출신 보철과 전문의 대표원장이 처음부터 끝까지 책임지고 진료합니다. 다양한 임상 경험과 치과보철과 전문의 노하우로 임플란트, 심미보철, 틀니, 자연치아 보존, 복합 교합 문제를 체계적으로 진료합니다.",
+ "address": "경기도 고양시 일산서구 중앙로 1564 5층 502호, 503호",
+ "address_parts": {"region": "경기도", "locality": "고양시 일산서구", "street": "중앙로 1564 5층 502호, 503호", "postal": "[우편번호]"},
+ "geo": {"lat": 37.6762006, "lng": 126.7481061},
+ "phone": "031-922-2888",
+ "biz_no": "619-20-70195",
+ "ceo": "황주섭",
+ "hours": [
+  {"label": "월·수·금", "days": ["Monday","Wednesday","Friday"], "open": "09:30", "close": "18:30"},
+  {"label": "화·목 (야간진료)", "days": ["Tuesday","Thursday"], "open": "09:30", "close": "20:30"},
+  {"label": "토요일 (점심시간 없음)", "days": ["Saturday"], "open": "09:30", "close": "14:00"}
+ ],
+ "lunch": "13:00 ~ 14:00 (평일)",
+ "closed": "일요일·공휴일 휴진",
+ "directions": {
+  "subway": "3호선 대화역 6번 출구 바로 앞 롯데리아 건물 5층",
+  "bus": "대화역(중) 정류장 하차 — 일반 33, 65, 88A, 88B, 92, 999, 98-1, 92-1 / 직행 9707, 1000, 1001, 3800, 8407, 9700 / 공항 3300",
+  "car": "건물 내 지하주차장 이용 가능, 인근 주차장: 경기 고양시 일산서구 중앙로 1560-34 아마노 이마트 주차장"
+ },
+ "links": {
+  "naver_booking": "https://booking.naver.com/booking/13/bizes/1693358",
+  "kakao_channel": "https://pf.kakao.com/_nprPX",
+  "naver_map": "https://map.naver.com/p/entry/place/2041085282",
+  "google_maps": "https://www.google.com/maps/place/?q=place_id:ChIJF5lYybOFfDUR36dHtXviqu0",
+  "naver_blog": "https://blog.naver.com/yonseiacro",
+  "homepage_old": "https://www.yonseiacro.com/",
+  "instagram": "[인스타그램 URL]"
+ },
+ "doctors": [
+  {"name": "황주섭", "role": "대표원장", "photo": "/assets/clinic/doctor-1-portrait.jpg", "specialty": "Prosthodontics",
+   "career": ["보건복지부 인증 치과보철과 전문의","연세대학교 치과대학 치의학과 졸업","연세대학교 치의학대학원 치과보철과 박사과정","국민건강보험 일산병원 인턴","국민건강보험 일산병원 치과보철과 레지던트 수료","연세대학교 치과대학 원내생진료실 지도교수","대한보철학회 인정의 및 정회원","전 서울SUN치과병원 원장, 전 더케이365치과병원 보철과 과장"]},
+  {"name": "김안나", "role": "원장", "photo": "/assets/clinic/doctor-2-portrait.jpg", "specialty": "Endodontics",
+   "career": ["보건복지부 인증 치과보존과 전문의","보건복지부 인증 통합치의학과 전문의","경희대학교 치의학전문대학원 졸업","강동경희대학교치과병원 인턴 수료","강동경희대학교치과병원 보존과 레지던트 수료","대한치과보존학회 인정의 및 정회원"]}
+ ],
+ "features": [
+  {"title": "대표원장 책임진료", "text": "연세대학교 출신 보철과 전문의 대표원장이 처음부터 끝까지 책임지고 진료합니다."},
+  {"title": "네비게이션 임플란트", "text": "3D CT와 구강스캐너 디지털 진단, 가상 시뮬레이션을 통해 오차를 줄이고 안전한 임플란트 식립을 돕습니다."},
+  {"title": "원내기공소 One-Stop System", "text": "디지털 스캔부터 보철물 제작까지 원내기공소에서 정교하고 신속하게 진행합니다."}
+ ],
+ "treatments": [
+  {"id":"implant","name":"임플란트","tag":"임플란트","text":"안전한 재료, 정확한 구강상태, 풍부한 경험으로 만족스러운 결과를 돕습니다."},
+  {"id":"cavity","name":"충치치료","tag":"충치치료","text":"자연치아를 지키고 과잉진료 없는 치과치료를 진행합니다."},
+  {"id":"gum","name":"잇몸치료","tag":"잇몸치료","text":"염증과 질병을 막고 건강한 치주조직을 유지하기 위한 관리 및 치료를 진행합니다."},
+  {"id":"wisdom","name":"사랑니 발치","tag":"사랑니 발치","text":"다양한 구강질환을 유발할 수 있어 주기적인 검진과 필요한 발치를 안내합니다."},
+  {"id":"denture","name":"틀니","tag":"틀니","text":"자연치아가 상실된 경우 치아를 대신하는 보철물로 씹는 기능을 회복합니다."},
+  {"id":"esthetic","name":"심미보철","tag":"보철치료","text":"치아삭제는 최소로 하고 자연치아의 색, 질감, 강도를 고려해 심미적으로 치료합니다."},
+  {"id":"endo","name":"신경치료","tag":"신경치료","text":"감염된 신경조직을 제거하고 말끔하게 청소해 자연치아를 최대한 보호합니다."},
+  {"id":"whitening","name":"치아미백","tag":"치아미백","text":"치아의 착색이나 변색을 제거하고 밝고 하얀 치아색을 되찾기 위한 시술입니다."},
+  {"id":"tmj","name":"턱관절 치료","tag":"턱관절 치료","text":"턱관절 질환의 원인을 찾아서 예방하고 관리하는 프로그램을 제공합니다."}
+ ],
+ "equipment": ["Megagen N2 유닛체어","PrimeScan 구강스캐너","Ray Quantum 5D CBCT","무통마취기","3D printer 및 원내기공실","PHL 레이저"],
+ "verification": {"naver": "[네이버 서치어드바이저 인증코드]", "google": "[구글 서치콘솔 인증코드]"}
+}
