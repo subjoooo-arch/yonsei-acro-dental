@@ -22,7 +22,7 @@ def webp(src):
   fp=R+src; out=None
   if src.startswith('/assets/') and re.search(r'\.(jpe?g|png)$',src,re.I) and os.path.exists(fp):
     wp=re.sub(r'\.(jpe?g|png)$','.webp',fp,flags=re.I)
-    if not os.path.exists(wp) or os.path.getmtime(wp)<os.path.getmtime(fp):
+    if not os.path.exists(wp):
       im=Image.open(fp); im=im.convert('RGBA' if im.mode in('RGBA','LA','P') else 'RGB')
       if im.width>1200: im=im.resize((1200,round(im.height*1200/im.width)),Image.LANCZOS)
       im.save(wp,'WEBP',quality=78,method=6)
