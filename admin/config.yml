@@ -28,10 +28,12 @@ collections:
     format: YYYY-MM-DD
     date_format: YYYY-MM-DD
     time_format: false
-  - label: 태그(치료분야)
+  - label: 태그 (임상 사례는 "임상 케이스", 병원 소식은 "병원 이야기")
     name: tag
     widget: select
     options:
+    - 임상 케이스
+    - 병원 이야기
     - 임플란트
     - 충치치료
     - 신경치료
@@ -44,7 +46,6 @@ collections:
     - 소아치과
     - 교정·유지장치
     - 예방·검진
-    - 병원 이야기
   - label: 요약(검색·AI 요약용 답변 1~2문장)
     name: summary
     widget: text
