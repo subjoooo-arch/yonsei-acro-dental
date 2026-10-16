@@ -5,7 +5,7 @@
 - `content/posts/*.md`: 블로그 (각 글은 한 섹션에만; 옮긴 글은 `redirect_from`으로 _redirects 자동 생성)
 - 임상 케이스: 블로그 글에 태그 `임상 케이스`를 달면 메뉴의 임상 케이스(/blog/ 태그 필터)에 모입니다
 - `content/_templates/`: 새 글/케이스 템플릿
-- `scripts/build.py`: md → HTML, `blog/posts.json`, `cases/cases.json`, `sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD 생성
+- `scripts/build.py`: md → HTML, `blog/posts.json`, `sitemap.xml`, `robots.txt`, `llms.txt`, JSON-LD 생성
 - `scripts/import_naver.py`: 네이버 블로그 글 복사 (본문·날짜·이미지 로컬 저장·태그 자동지정)
 - `admin/`: Decap CMS 관리자 (/admin/, noindex)
 ※ HTML 파일은 생성물입니다. 직접 고치지 말고 content/data를 수정한 뒤 빌드하세요.
@@ -35,11 +35,11 @@ python3 -m http.server 8000   # http://localhost:8000
 
 ## ⚠️ 의료광고법 주의 (반드시 확인)
 - 의료법 제56조: 치료 전·후 사진, 치료경험담, 과장·비교 광고 등은 제한되며, 홈페이지/블로그 내용도 의료광고 심의(대한치과의사협회 의료광고심의위원회) 대상이 될 수 있습니다.
-- 임상 케이스는 자동 가져온 3건 모두 `review_required: true`로 **검색엔진 noindex·사이트맵 제외** 상태입니다. 전/후 사진은 자동으로 첫/마지막 이미지를 넣은 것이므로 원장님이 직접 선정하고, 부작용·주의사항 기재와 심의 여부를 확인한 뒤 `review_required: false`로 바꾸세요. 환자 식별 가능 사진은 동의서 필수.
+- 임상 케이스(태그 `임상 케이스` 블로그 글)는 전/후 사진·치료 결과 표현이 의료광고 심의 대상이 될 수 있으므로 게시 전 원장님 검수 필수. 글 페이지에는 의료법 안내 문구가 자동으로 붙습니다.
 - 네이버 블로그 원문을 그대로 옮긴 글도 같은 기준으로 검토하세요. (네이버 블로그와 본문이 중복되면 검색 노출이 나뉠 수 있으니 장기적으로는 요약·재작성 권장)
 
 ## 남은 확인 항목
-`[도메인]`, 네이버/구글 인증코드, 우편번호, 인스타그램 URL, 임상 케이스 치료기간, GitHub 저장소(OAuth 사용 시).
+`[도메인]`, 네이버/구글 인증코드, 우편번호, 인스타그램 URL, GitHub 저장소(OAuth 사용 시).
 
 ## 지도 (네이버 지도)
 네이버 지도 페이지는 iframe 삽입을 막고 있어서(X-Frame-Options: DENY) 기본으로는 **네이버 정적 지도 이미지**(`assets/clinic/map-static.png`, 클릭 시 네이버 지도 플레이스로 이동)를 보여줍니다.
