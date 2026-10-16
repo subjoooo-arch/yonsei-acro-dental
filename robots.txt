@@ -1,49 +1,28 @@
+# 검색엔진·AI 검색/답변 봇 허용
 User-agent: *
 Allow: /
 Disallow: /admin/
 
-User-agent: GPTBot
-Allow: /
-Disallow: /admin/
-
-User-agent: OAI-SearchBot
-Allow: /
-Disallow: /admin/
-
-User-agent: ChatGPT-User
-Allow: /
-Disallow: /admin/
-
-User-agent: ClaudeBot
-Allow: /
-Disallow: /admin/
-
-User-agent: Claude-Web
-Allow: /
-Disallow: /admin/
-
-User-agent: PerplexityBot
-Allow: /
-Disallow: /admin/
-
-User-agent: Google-Extended
-Allow: /
-Disallow: /admin/
-
-User-agent: Applebot-Extended
-Allow: /
-Disallow: /admin/
-
+User-agent: Googlebot
 User-agent: Yeti
-Allow: /
-Disallow: /admin/
-
 User-agent: Bingbot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
 Allow: /
 Disallow: /admin/
 
+# AI 학습용 크롤러 차단
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
 User-agent: CCBot
-Allow: /
-Disallow: /admin/
+User-agent: Bytespider
+User-agent: meta-externalagent
+Disallow: /
 
 Sitemap: https://yonseiacro-preview.netlify.app/sitemap.xml

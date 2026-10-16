@@ -75,20 +75,21 @@ def verif():
   for k,n in (('naver_verification','naver-site-verification'),('google_verification','google-site-verification'),('bing_verification','msvalidate.01')):
     if C.get(k): o+=f'<meta name="{n}" content="{E(C[k])}">'
   return o
+OGDIM='<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
 def head(title,desc,path,img='/assets/brand/og-image.jpg',typ='website',noindex=False,extra=''):
   return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>if(/(invite|recovery|confirmation|email_change)_token=/.test(location.hash))location.replace('/admin/'+location.hash)</script>
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{D}{path}">
 {'<meta name="robots" content="noindex,follow">' if noindex else '<meta name="robots" content="index,follow,max-image-preview:large">'}
 {verif()}
-<meta property="og:type" content="{typ}"><meta property="og:site_name" content="{C['name']}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{D}{path}"><meta property="og:image" content="{D}{img}"><meta property="og:locale" content="ko_KR">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{D}{img}">
+<meta property="og:type" content="{typ}"><meta property="og:site_name" content="{C['name']}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{D}{path}"><meta property="og:image" content="{D}{img}">{OGDIM if img.endswith("og-image.jpg") else ""}<meta property="og:image:alt" content="{E(title)}"><meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{D}{img}"><meta name="twitter:image:alt" content="{E(title)}">{extra}
 <meta name="geo.region" content="KR-41"><meta name="geo.position" content="{C['geo']['lat']};{C['geo']['lng']}">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/assets/favicon-192.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="theme-color" content="#2f4a6b"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preload" as="style" href="{FONT}" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="{FONT}"></noscript>{'<link rel="preload" as="image" href="/assets/clinic/interior-1.webp" fetchpriority="high">' if path=="/" else ""}<style>{CSS}</style>{extra}</head><body class="{"home" if path=="/" else "sub"}">
 <header class="site"><div class="wrap"><a class="logo" href="/" aria-label="{C['name']} 홈"><img class="lc" src="/assets/brand/logo-horizontal-96.png" alt="{C['name']} 로고" loading="eager"><img class="lw" src="/assets/brand/logo-horizontal-white-96.png" alt="" aria-hidden="true" loading="eager"></a><nav aria-label="주 메뉴"><a href="/#doctors">의료진</a><a href="/treatments/">진료과목</a><a href="/blog/">블로그</a><a href="/blog/#%EC%9E%84%EC%83%81%20%EC%BC%80%EC%9D%B4%EC%8A%A4">임상 케이스</a><a href="/about/">병원 정보</a><a href="/faq/">FAQ</a><a href="/#location">오시는 길</a></nav><a class="hbtn" href="{L['naver_booking']}" target="_blank" rel="noopener">예약하기</a></div></header><main>'''
 def foot():
   return f'''</main><section class="ctaband"><div class="wrap"><div><p class="eyebrow light">예약 · 상담</p><h2>아픈 곳이 없어도,<br><em>궁금한 점부터</em> 편하게<br>물어보세요.</h2><p>전문의가 현재 상태를 정확히 설명드리고,<br>꼭 필요한 치료만 함께 정하겠습니다.</p></div>
 <div class="cbtns"><a class="cb w" href="tel:{C['phone']}"><span>전화 {C['phone']}</span><i>→</i></a><a class="cb y" href="{L['kakao_channel']}" target="_blank" rel="noopener"><span>카카오톡 상담</span><i>→</i></a><a class="cb g" href="{L['naver_booking']}" target="_blank" rel="noopener"><span>네이버 예약</span><i>→</i></a></div></div></section><footer class="site"><div class="wrap fgrid"><div><img class="flogo" src="/assets/brand/logo-stacked-white-260.png" alt="{C['name']} 로고" loading="lazy"><strong>{C['name']}</strong><address>주소: {C['address']}<br>대표전화: <a href="tel:{C['phone']}">{C['phone']}</a><br>대표: {C['ceo']} · 사업자등록번호: {C['biz_no']}</address></div>
-<div class="flinks"><a href="{L['naver_booking']}" target="_blank" rel="noopener">네이버 예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener">카카오톡 채널 상담·예약</a><a href="{L['naver_map']}" target="_blank" rel="noopener">네이버 지도</a><a href="{L['google_maps']}" target="_blank" rel="noopener">Google 지도</a><a href="{L['naver_blog']}" target="_blank" rel="noopener">네이버 블로그</a></div></div>
+<div class="flinks"><a href="{L['naver_booking']}" target="_blank" rel="noopener">네이버 예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener">카카오톡 채널 상담·예약</a><a href="{L['naver_map']}" target="_blank" rel="noopener">네이버 지도</a><a href="{L['google_maps']}" target="_blank" rel="noopener">Google 지도</a><a href="{L['naver_blog']}" target="_blank" rel="noopener">네이버 블로그</a><a href="/privacy/">개인정보처리방침</a></div></div>
 <div class="wrap copy">© {datetime.date.today().year} Yonsei Acro Dental Clinic. 본 사이트의 의료 정보는 일반적인 안내이며, 치료 결과는 개인에 따라 다를 수 있습니다.</div></footer>
 <div class="fab"><a href="{L['naver_booking']}" target="_blank" rel="noopener" class="f1" aria-label="네이버 예약">예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener" class="f2" aria-label="카카오톡 상담">톡</a><a href="tel:{C['phone']}" class="f3" aria-label="전화">☎</a></div><script src="/js/site.js" defer></script><div class="mbar"><a href="tel:{C['phone']}">📞 전화</a><a href="{L['naver_booking']}" target="_blank" rel="noopener" class="nv">N 네이버 예약</a><a href="{L['kakao_channel']}" target="_blank" rel="noopener" class="kk">💬 카카오 예약</a></div></body></html>'''
 def card(p,base=None):
@@ -162,7 +163,7 @@ for p in posts:
   sec=('블로그','/blog/')
   img=p.get('thumbnail') or '/assets/brand/og-image.jpg'
   qa=p.get('faq') or []; qs=[(q['q'],q['a']) for q in qa if q.get('q')]
-  s=head(f'{p["title"]} | {C["name"]}',p['summary'][:150],p['url'],img,'article')+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="{sec[1]}">{sec[0]}</a></nav>
+  s=head(f'{p["title"]} | {C["name"]}',p['summary'][:150],p['url'],img,'article',extra=f'<meta property="article:published_time" content="{p["date"]}"><meta property="article:modified_time" content="{modified(p)}"><meta property="article:author" content="{E(C["doctors"][doc_idx(p)]["name"])}"><meta property="article:section" content="{E(p["tag"])}">')+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="{sec[1]}">{sec[0]}</a></nav>
 <header><a class="tag" href="{sec[1]}#{E(p["tag"])}">#{E(p["tag"])}</a><h1>{E(p["title"])}</h1><p class="meta"><time datetime="{p["date"]}">{p["date"].replace("-",". ")}</time> · {byline(p)}</p></header>
 <aside class="tldr" aria-label="핵심 요약"><strong>한눈에 보기</strong><p><b>Q.</b> {E(p.get("question") or p["title"])}</p><p><b>A.</b> {E(p["summary"])}</p><p class="small">진료: {C["name"]} · {C["address"]} · {C["phone"]}</p></aside>
 {CASE_NOTE if p.get("tag")==CASE_TAG else ""}<div class="body">{md(p["body"])}</div>{faq_html(qs) if qs else ""}
@@ -173,19 +174,36 @@ for p in posts:
    "image":D+img,"inLanguage":"ko-KR","mainEntityOfPage":D+p['url'],"author":{"@id":D+f'/#doctor-{doc_idx(p)}'},"publisher":{"@id":CLINIC_ID},"reviewedBy":{"@id":D+f'/#doctor-{doc_idx(p)}'},"about":{"@type":"MedicalProcedure","name":p['tag']}}
   if p.get('source_url'): art['isBasedOn']=p['source_url']
   s+=ld(art,crumbs([('홈','/'),(sec[0],sec[1]),(p['title'],p['url'])]),physician_ld()[doc_idx(p)],*( [faq_ld(qs)] if qs else []))+foot(); w(p['url'].lstrip('/'),s)
+LAST_REVIEWED='2026-10-16'
+REV=next(i for i,d in enumerate(C['doctors']) if d['role']=='대표원장')
+TREAT_KW={'implant':['임플란트'],'cavity':['충치'],'gum':['잇몸','스케일링'],'wisdom':['사랑니'],'denture':['틀니'],'esthetic':['크라운','라미네이트','인레이'],'endo':['신경치료'],'whitening':['미백'],'tmj':['턱']}
+def treat_faq(t):
+  import json as _j
+  G=_j.load(open(os.path.join(R,'data/faq.json')))['groups']
+  kws=TREAT_KW.get(t['id']) or [t['name'].split()[0]]
+  out=[(i['q'],i['a']) for g in G for i in g['items'] if any(k in i['q'] for k in kws)][:5]
+  for g in G:
+    for i in g['items']:
+      if len(out)>=3: break
+      if g['category'].startswith('예약') and (i['q'],i['a']) not in out and ('예약' in i['q'] or '처음' in i['q']): out.append((i['q'],i['a']))
+  return out
 # ---- treatments
 ti=head(f'진료과목 | 일산 대화역 치과 {C["name"]}','일산서구 대화역 연세아크로치과 진료과목: '+', '.join(t['name'] for t in C['treatments']),'/treatments/')+'<div class="wrap page"><nav class="bc"><a href="/">홈</a> › 진료과목</nav><h1 class="ptitle">진료과목</h1><div class="grid">'+tr+'</div></div>'+ld(crumbs([('홈','/'),('진료과목','/treatments/')]))+foot()
 w('treatments/index.html',ti)
 for t in C['treatments']:
   rel=[p for p in blog if p['tag']==t['tag']][:6]
-  qs=[(f"연세아크로치과에서 {t['name']} 진료를 받을 수 있나요?",f"네. {t['text']} 보건복지부 인증 전문의가 진료합니다."),
-      (f"{t['name']} 상담은 어떻게 예약하나요?",f"대표전화 {C['phone']}, 네이버 예약 또는 카카오톡 채널로 예약하실 수 있습니다."),BASE_FAQ[0],BASE_FAQ[1]]
+  qs=treat_faq(t)
+  lq,la=f"{t['name']}은(는) 어떤 치료이며, 무엇을 먼저 확인하나요?",f"{t['text']} 치료가 필요한지, 어떤 방법이 맞는지는 검진으로 현재 상태를 확인한 뒤 전문의와 상의해 결정합니다."
+  rv=C['doctors'][REV]
   path=f'/treatments/{t["id"]}.html'
   s=head(f'일산 대화역 {t["name"]} | {C["name"]} (일산서구 치과)',f'일산 {t["name"]} – {t["text"]} 일산서구 대화역 6번 출구 앞 연세아크로치과의원, 보건복지부 인증 전문의 진료.',path)+f'''<article class="col"><nav class="bc"><a href="/">홈</a> › <a href="/treatments/">진료과목</a> › {t["name"]}</nav><h1>{t["name"]}</h1>
-<aside class="tldr"><strong>한눈에 보기</strong><p>{t["text"]}</p><p class="small">{C["name"]} · {C["address"]} · {C["phone"]}</p></aside>{faq_html(qs)}
+<p class="meta">감수: <a href="/about/#doctor-{REV}" rel="author">{rv["role"]} {rv["name"]}</a> · 최종 검토일 <time datetime="{LAST_REVIEWED}">{LAST_REVIEWED.replace("-",". ")}</time></p>
+<aside class="tldr" aria-label="핵심 요약"><strong>한눈에 보기</strong><p><b>Q.</b> {E(lq)}</p><p><b>A.</b> {E(la)}</p><p class="small">{C["name"]} · {C["address"]} · {C["phone"]}</p></aside>{faq_html(qs)}<p class="small"><a href="/faq/">자주 묻는 질문 전체 보기 →</a></p>
 {'<section class="rel"><h2>관련 블로그 글</h2><div class="plist">'+''.join(card(x) for x in rel)+'</div></section>' if rel else ''}
 <div class="cta">{booking_box()}</div></article>'''
-  s+=ld(crumbs([('홈','/'),('진료과목','/treatments/'),(t['name'],path)]),faq_ld(qs),{"@context":"https://schema.org","@type":"MedicalWebPage","name":t['name'],"about":{"@type":"MedicalProcedure","name":t['name'],"description":t['text']},"publisher":{"@id":CLINIC_ID}})+foot()
+  s+=ld(crumbs([('홈','/'),('진료과목','/treatments/'),(t['name'],path)]),faq_ld(qs),{"@context":"https://schema.org","@type":"MedicalWebPage","@id":D+path+"#webpage","url":D+path,"name":f"{t['name']} | {C['name']}","inLanguage":"ko-KR","description":la,
+    "reviewedBy":{"@id":D+f'/#doctor-{REV}'},"lastReviewed":LAST_REVIEWED,"publisher":{"@id":CLINIC_ID},
+    "mainEntity":{"@type":"MedicalProcedure","name":t['name'],"description":t['text'],"url":D+path},"about":{"@type":"MedicalProcedure","name":t['name']}},physician_ld()[REV])+foot()
   w(path.lstrip('/'),s)
 # ---- about (fact sheet for search/AI)
 ABOUT_QA=[
@@ -222,11 +240,27 @@ fp=head(f'자주 묻는 질문(FAQ) | 일산 대화역 치과 {C["name"]}',f'연
 fp+=f'<div class="wrap page narrow"><nav class="bc"><a href="/">홈</a> › FAQ</nav><h1 class="ptitle">자주 묻는 질문</h1><p class="lead l">진료시간, 예약, 위치, 의료진, 진료과목에 대해 자주 묻는 질문입니다. 더 궁금한 점은 전화({C["phone"]})나 카카오톡으로 문의해 주세요.</p><div class="fsearch" role="search"><label for="fq" class="sr">FAQ 검색</label><input id="fq" type="search" placeholder="궁금한 내용을 검색해보세요 (예: 주차, 임플란트)" autocomplete="off"><button type="button" id="fqx" aria-label="검색어 지우기" hidden>×</button></div><div class="chipsq">{chips}</div><p id="fqn" class="muted" aria-live="polite"></p><div class="pills" style="margin-bottom:40px">{nav}</div><div id="fqbody">{body}</div><div id="fqempty" class="empty" hidden><h2>검색 결과가 없습니다</h2><p>찾으시는 내용이 없다면 편하게 문의해 주세요.</p>{booking_box()}</div></div><script src="/js/faq.js" defer></script>'
 fp+=ld(faq_ld(fqs),crumbs([('홈','/'),('FAQ','/faq/')]))+foot()
 w('faq/index.html',fp)
+# ---- privacy
+PRIV=f'''<section><h2>1. 개요</h2><p>{C['name']}(이하 '병원')은 「개인정보 보호법」에 따라 이용자의 개인정보를 보호하고 관련 고충을 원활하게 처리하기 위해 다음과 같이 개인정보처리방침을 공개합니다. 이 방침은 병원 홈페이지({D})에 적용됩니다.</p></section>
+<section><h2>2. 홈페이지에서 수집하는 개인정보</h2><p>이 홈페이지에는 회원가입, 상담 신청서, 문의 양식 등 이용자가 개인정보를 직접 입력하는 기능이 없으며, 홈페이지를 통해 이름·연락처 등 개인정보를 수집하지 않습니다.</p><p>홈페이지는 방문 통계·광고용 분석 도구(예: Google Analytics)나 추적용 쿠키를 사용하지 않습니다.</p></section>
+<section><h2>3. 자동으로 생성되는 정보 (호스팅 접속 기록)</h2><p>홈페이지는 Netlify, Inc.(미국)의 호스팅 서비스를 이용합니다. 홈페이지에 접속하면 서비스 제공과 보안을 위해 IP 주소, 접속 일시, 요청한 페이지, 브라우저 정보 등 접속 기록이 호스팅 사업자의 서버에 자동으로 기록될 수 있습니다. 이 정보는 호스팅 사업자의 정책에 따라 처리되며, 병원은 이를 이용자 식별 목적으로 사용하지 않습니다.</p></section>
+<section><h2>4. 외부 서비스 연결</h2><p>홈페이지의 예약·상담·지도 버튼은 아래 외부 서비스로 연결되거나 해당 서비스의 기능을 불러옵니다. 해당 서비스에서 입력하거나 처리되는 개인정보는 각 사업자의 개인정보처리방침이 적용됩니다.</p><ul><li>네이버 예약, 네이버 지도, 네이버 블로그 (네이버㈜)</li><li>카카오톡 채널 상담·예약 (㈜카카오)</li><li>Google 지도 (Google LLC)</li><li>웹 글꼴 제공 CDN (글꼴 파일 요청 시 IP 주소 등 접속 정보가 전달될 수 있음)</li></ul></section>
+<section><h2>5. 관리자 페이지</h2><p>콘텐츠 관리를 위한 관리자 페이지(/admin/)는 병원이 초대한 관리자만 이용하며, 로그인에 필요한 이메일 주소는 Netlify Identity 서비스를 통해 처리됩니다. 일반 이용자에게는 해당되지 않습니다.</p></section>
+<section><h2>6. 내원 진료 시 개인정보</h2><p>진료를 위해 내원하여 제공하는 개인정보와 진료기록은 홈페이지와 별개로 「의료법」 등 관계 법령에 따라 병원에서 처리·보관합니다. 관련 문의는 병원으로 연락해 주세요.</p></section>
+<section><h2>7. 이용자의 권리</h2><p>이용자는 병원에 개인정보 열람·정정·삭제·처리정지를 요구할 수 있으며, 병원은 관계 법령에 따라 지체 없이 조치합니다.</p></section>
+<section><h2>8. 개인정보 보호책임자</h2><p>성명: {C['ceo']} (대표) · 연락처: <a href="tel:{C['phone']}">{C['phone']}</a> · 주소: {C['address']}</p><p>개인정보 침해에 대한 신고·상담은 개인정보침해신고센터(국번 없이 118, privacy.kisa.or.kr), 개인정보분쟁조정위원회(1833-6972, www.kopico.go.kr)에 문의하실 수 있습니다.</p></section>
+<section><h2>9. 시행일 및 변경</h2><p>이 개인정보처리방침은 2026년 10월 16일부터 적용됩니다. 내용이 변경되는 경우 홈페이지를 통해 공지합니다.</p></section>'''
+w('privacy/index.html',head(f'개인정보처리방침 | {C["name"]}',f'{C["name"]} 홈페이지 개인정보처리방침: 수집 항목, 외부 서비스, 이용자 권리, 보호책임자 안내.','/privacy/')+f'<article class="col"><nav class="bc"><a href="/">홈</a> › 개인정보처리방침</nav><h1>개인정보처리방침</h1><div class="body">{PRIV}</div></article>'+ld(crumbs([('홈','/'),('개인정보처리방침','/privacy/')]))+foot())
 # ---- sitemap / llms
-urls=['/','/about/','/faq/','/treatments/','/blog/']+[f'/treatments/{t["id"]}.html' for t in C['treatments']]+[p['url'] for p in posts]
+_dis='Disallow: /admin/\n'
+ROBOTS=('# 검색엔진·AI 검색/답변 봇 허용\nUser-agent: *\nAllow: /\n'+_dis+'\n'
+ +''.join(f'User-agent: {b}\n' for b in ['Googlebot','Yeti','Bingbot','OAI-SearchBot','ChatGPT-User','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User'])+'Allow: /\n'+_dis+'\n'
+ +'# AI 학습용 크롤러 차단\n'+''.join(f'User-agent: {b}\n' for b in ['GPTBot','ClaudeBot','Google-Extended','Applebot-Extended','CCBot','Bytespider','meta-externalagent'])+'Disallow: /\n\n'
+ +f'Sitemap: {D}/sitemap.xml\n')
+urls=['/','/about/','/faq/','/treatments/','/blog/','/privacy/']+[f'/treatments/{t["id"]}.html' for t in C['treatments']]+[p['url'] for p in posts]
 lm={p['url']:modified(p) for p in posts}
 w('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{D}{u}</loc>{"<lastmod>"+lm[u]+"</lastmod>" if u in lm else ""}</url>\n' for u in urls)+'</urlset>\n')
-w('robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\n\n'+''.join(f'User-agent: {b}\nAllow: /\nDisallow: /admin/\n\n' for b in ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-Web','PerplexityBot','Google-Extended','Applebot-Extended','Yeti','Bingbot','CCBot'])+f'Sitemap: {D}/sitemap.xml\n')
+w('robots.txt',ROBOTS)
 llms=f"""# {C['name']} ({C['name_en']})
 
 > 경기도 고양시 일산서구 대화동, 3호선 대화역 6번 출구 바로 앞 롯데리아 건물 5층에 위치한 치과의원. 보건복지부 인증 치과보철과·치과보존과·통합치의학과 전문의가 진료합니다.
@@ -242,7 +276,7 @@ llms=f"""# {C['name']} ({C['name_en']})
 ## 의료진
 """+''.join(f"- {d['role']} {d['name']}: {', '.join(d['career'][:3])}\n" for d in C['doctors'])+"\n## 진료과목\n"+''.join(f"- [{t['name']}]({D}/treatments/{t['id']}.html): {t['text']}\n" for t in C['treatments'])+"\n## 블로그 (치료 정보)\n"+''.join(f"- [{p['title']}]({D}{p['url']}) ({p['date']})\n" for p in [x for x in blog if x not in cases][:15])+"\n## 임상 케이스\n"+''.join(f"- [{c['title']}]({D}{c['url']}) ({c['date']})\n" for c in cases)
 llms=re.sub(r'\n## [^\n]+\n(?=\n## |\s*$)','\n',llms)
-llms=llms.replace('## 기본 정보','## 병원 정보 페이지\n- '+D+'/about/ (사실 정보 요약, Q&A)\n- 전체 텍스트: '+D+'/llms-full.txt\n\n## 기본 정보',1)
+llms=llms.replace('## 기본 정보','진료시간·예약 방법 등은 변경될 수 있으므로 사이트의 최신 정보를 확인하세요. 진료 관련 설명은 일반적인 안내이며, 개인별 치료 가능 여부와 계획은 검진 후 전문의와 상의해 결정됩니다. 임상 케이스는 개별 환자의 기록으로 동일한 결과를 보장하지 않습니다.\n\n## 주요 페이지\n'+f'- [홈]({D}/): 병원·의료진·진료과목 소개\n- [병원 정보]({D}/about/): 사실 정보 요약과 Q&A\n- [진료과목]({D}/treatments/): 진료과목 전체\n- [자주 묻는 질문]({D}/faq/): 예약·비용·치료별 질문과 답변\n- [블로그]({D}/blog/): 치료 정보와 병원 이야기\n- [개인정보처리방침]({D}/privacy/): 개인정보 처리 안내\n- [전체 텍스트]({D}/llms-full.txt): 이 파일의 상세판\n\n## 기본 정보',1)
 w('llms.txt',llms)
 full=llms+'\n\n# 자주 묻는 질문\n'+''.join(f'\nQ. {q}\nA. {a}\n' for q,a in fqs)+'\n\n# 진료과목 상세\n'+''.join(f"\n## {t['name']}\n{t['text']}\nURL: {D}/treatments/{t['id']}.html\n" for t in C['treatments'])
 def plain(b): return re.sub(r'!\[[^\]]*\]\([^)]*\)\n*','',b).strip()
